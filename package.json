@@ -1,0 +1,27 @@
+{
+  "name": "academic-homepage",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@astrojs/rss": "^4.0.0",
+    "astro": "^5.0.0",
+    "hastscript": "^9.0.1",
+    "katex": "^0.16.0",
+    "rehype-katex": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "typescript": "^5.0.0",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^12.0.0"
+  }
+}

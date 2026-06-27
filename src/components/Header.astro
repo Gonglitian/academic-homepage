@@ -1,0 +1,36 @@
+---
+const name = "Litian Gong";
+const nameCn = "龚利天";
+const email = "lgong024@ucr.edu";
+const isHome = Astro.url.pathname === "/";
+const links = [
+  // "Home" only shows off the homepage, so blog pages always have a way back.
+  ...(isHome ? [] : [{ label: "Home", href: "/" }]),
+  { label: "Email", href: `mailto:${email}` },
+  { label: "Google Scholar", href: "https://scholar.google.com/citations?user=cirHYboAAAAJ" },
+  { label: "GitHub", href: "https://github.com/gonglitian" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/Gonglitian/" },
+  { label: "Blog", href: "/blog" },
+];
+---
+
+<header class="header noselect">
+  <div class="header-content">
+    <div class="header-avatar">
+      <a href="/" class="home-link" aria-label="Home"><img src="/images/avatar.jpg" alt="Litian Gong" /></a>
+    </div>
+    <div class="header-text">
+      <div class="header-name">
+        <h1><a href="/" class="home-link">{name}</a> <span class="header-name-cn">「{nameCn}」</span></h1>
+      </div>
+      <div class="header-links">
+        {links.map((link, i) => (
+          <>
+            {i > 0 && <span class="sep">/</span>}
+            <a href={link.href} class="btn">{link.label}</a>
+          </>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,33 @@
+<button
+  class="theme-toggle"
+  id="theme-toggle"
+  aria-label="Toggle dark mode"
+  title="Toggle dark mode"
+>
+  <span class="light-icon">☾</span>
+  <span class="dark-icon" style="display:none">☀</span>
+</button>
+
+<script>
+  const toggle = document.getElementById('theme-toggle')!;
+  const lightIcon = toggle.querySelector('.light-icon')! as HTMLElement;
+  const darkIcon = toggle.querySelector('.dark-icon')! as HTMLElement;
+
+  const setTheme = (isDark: boolean) => {
+    document.documentElement.classList.toggle('dark', isDark);
+    lightIcon.style.display = isDark ? 'none' : 'inline';
+    darkIcon.style.display = isDark ? 'inline' : 'none';
+  };
+
+  // Init from localStorage or system preference
+  const stored = localStorage.getItem('theme');
+  if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    setTheme(true);
+  }
+
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    setTheme(isDark);
+  });
+</script>

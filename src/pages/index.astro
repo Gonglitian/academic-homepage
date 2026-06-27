@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Publications from '../components/Publications.astro';
+import VisitorMap from '../components/VisitorMap.astro';
+---
+
+<BaseLayout
+  title="Litian Gong — Academic Homepage"
+  description="Litian Gong (龚利天) — M.S. student at UC Riverside. Research in robot learning, imitation learning, VLMs, and embodied AI."
+>
+  <div class="homepage">
+  <Header />
+
+  <!-- Intro -->
+  <section class="intro" style="margin-bottom:32px;">
+    <p>
+      Hi there! I am a Master's student in Electrical Engineering at
+      <a href="https://www.ucr.edu/">University of California, Riverside</a>.
+      I am a member of <a href="https://tasl.ucr.edu/">TASL</a> under the supervision of
+      <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.
+      I am also a student research intern at the
+      <a href="https://liralab.usc.edu/">Learning and Interactive Robot Autonomy Lab (LIRA)</a> at USC,
+      working with <a href="https://ebiyik.github.io/">Prof. Erdem B&#305;y&#305;k</a>.
+    </p>
+    <p>
+      Before that, I received my Bachelor's degree from
+      <a href="https://english.hust.edu.cn/">Huazhong University of Science and Technology (HUST)</a>,
+      working with <a href="http://en.seee.hust.edu.cn/info/1057/1336.htm">Prof. Shaorong Wang</a>.
+    </p>
+    <p>
+      My research interest lies in robotic learning systems that fuse
+      <strong>imitation learning</strong>, <strong>reinforcement learning</strong>, and <strong>VLMs</strong>
+      to enable multimodal reasoning, long-horizon skills, sim-to-real transfer, and trustworthy, data-efficient autonomy.
+    </p>
+  </section>
+
+  <!-- Research Highlights -->
+  <section style="margin-bottom:32px;">
+    <div class="video-grid">
+      <div class="video-item">
+        <a href="https://autofocus-il.github.io/" target="_blank">
+          <img src="/images/autofocus-il.png" alt="AutoFocus-IL" style="width:100%;border-radius:6px;" />
+        </a>
+        <p><a href="https://autofocus-il.github.io/">AutoFocus-IL</a> <span style="font-size:0.8rem;color:var(--text-muted);">ICRA 2026</span></p>
+      </div>
+      <div class="video-item">
+        <a href="https://arxiv.org/abs/2509.15695" target="_blank">
+          <img src="/images/oric.png" alt="ORIC" style="width:100%;border-radius:6px;" />
+        </a>
+        <p><a href="https://arxiv.org/abs/2509.15695">ORIC</a> <span style="font-size:0.8rem;color:var(--text-muted);">CVPR 2026</span></p>
+      </div>
+      <div class="video-item">
+        <video autoplay muted loop playsinline>
+          <source src="/images/placeholder.mp4" type="video/mp4" />
+        </video>
+        <p><a href="#">DynaMem</a> <span style="font-size:0.8rem;color:var(--text-muted);">CoRL 2026</span></p>
+      </div>
+      <div class="video-item">
+        <video autoplay muted loop playsinline>
+          <source src="/images/placeholder.mp4" type="video/mp4" />
+        </video>
+        <p><a href="#">EvoMoE</a> <span style="font-size:0.8rem;color:var(--text-muted);">In Prep.</span></p>
+      </div>
+      <div class="video-item">
+        <video autoplay muted loop playsinline>
+          <source src="/images/placeholder.mp4" type="video/mp4" />
+        </video>
+        <p><a href="#">AutoFocus-3D</a> <span style="font-size:0.8rem;color:var(--text-muted);">In Prep.</span></p>
+      </div>
+      <div class="video-item">
+        <video autoplay muted loop playsinline>
+          <source src="/images/placeholder.mp4" type="video/mp4" />
+        </video>
+        <p><a href="#">Crowdsourced-VLA</a> <span style="font-size:0.8rem;color:var(--text-muted);">In Prep.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- News -->
+  <section style="margin-bottom:32px;">
+    <h2 class="noselect">News</h2>
+    <ul class="news-list" style="list-style:none;padding:0;">
+      <li>
+        <b>(2026 Feb)</b> One paper accepted to <b>CVPR 2026</b>:
+        <a href="https://arxiv.org/abs/2509.15695">ORIC: Benchmarking Object Recognition under Contextual Incongruity in LVLMs</a>.
+      </li>
+      <li>
+        <b>(2026 Jan)</b> One paper accepted to <b>ICRA 2026</b>:
+        <a href="https://arxiv.org/abs/2511.18617">AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning</a>.
+      </li>
+      <li>
+        <b>(2025 Jun)</b> Joined the <a href="https://liralab.usc.edu/">LIRA Lab</a> at USC,
+        working with <a href="https://ebiyik.github.io/">Prof. Erdem B&#305;y&#305;k</a>.
+      </li>
+      <li>
+        <b>(2024 Nov)</b> Started research at <a href="https://tasl.ucr.edu/">TASL</a>, UC Riverside,
+        working with <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.
+      </li>
+      <li>
+        <b>(2024 Sep)</b> Started Master's program in Electrical Engineering at UC Riverside.
+      </li>
+      <li>
+        <b>(2024 Jun)</b> Graduated from HUST as <b>Outstanding Undergraduate Graduate</b>.
+      </li>
+    </ul>
+  </section>
+
+  <!-- Publications -->
+  <Publications />
+
+  <!-- Visitor map (global IP / location stats) -->
+  <VisitorMap />
+
+  <!-- Footer -->
+  <footer class="footer noselect">
+    <p style="font-size:0.8rem;">&copy; {new Date().getFullYear()} Litian Gong</p>
+  </footer>
+  </div>
+</BaseLayout>

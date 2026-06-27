@@ -1,0 +1,114 @@
+---
+interface Pub {
+  title: string;
+  authors: string;
+  venue: string;
+  year: number;
+  categories: string[];
+  links: { label: string; href: string; cls?: string }[];
+  media?: { type: 'video'; src: string } | { type: 'image'; src: string };
+  highlight?: boolean;
+  award?: string;
+}
+
+const nameStrong = "<span class='bold'>Litian Gong</span>";
+
+const pubs: Pub[] = [
+  {
+    title: "AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations",
+    authors: `${nameStrong}, Fatemeh Bahrani, Yutai Zhou, Amin Banayeeanzade, Jiachen Li, Erdem Bıyık`,
+    venue: "IEEE International Conference on Robotics and Automation (<b>ICRA</b>)",
+    year: 2026,
+    categories: ["selected", "vla", "il"],
+    highlight: true,
+    media: { type: "image", src: "/images/autofocus-il.png" },
+    links: [
+      { label: "project page", href: "https://autofocus-il.github.io/", cls: "btn-orange" },
+      { label: "arXiv", href: "https://arxiv.org/abs/2511.18617", cls: "btn-red" },
+      { label: "code", href: "https://github.com/autofocus-il/autofocus-il" },
+    ],
+  },
+  {
+    title: "ORIC: Benchmarking Object Recognition under Contextual Incongruity in Large Vision-Language Models",
+    authors: `Zhaoyang Li*, Zhan Ling*, Yuchen Zhou, ${nameStrong}, Erdem Bıyık, Hao Su`,
+    venue: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (<b>CVPR</b>)",
+    year: 2026,
+    categories: ["selected", "vlm"],
+    media: { type: "image", src: "/images/oric.png" },
+    links: [
+      { label: "arXiv", href: "https://arxiv.org/abs/2509.15695", cls: "btn-red" },
+      { label: "code", href: "https://github.com/ZhaoyangLi-1/ORIC" },
+    ],
+  },
+  {
+    title: "A Friendly Grid-connected Distribution System with PV and ESS for Remote Rural Residential Family",
+    authors: `${nameStrong}, Jiaxuan Ren, Shuoyu Jin, Shaorong Wang`,
+    venue: "3rd International Conference on New Energy and Power Engineering (<b>ICNEPE</b>)",
+    year: 2023,
+    categories: ["other"],
+    media: { type: "image", src: "/images/icnepe2023.png" },
+    links: [
+      { label: "DOI", href: "https://doi.org/10.1109/ICNEPE60694.2023.10429728", cls: "btn-dark" },
+    ],
+  },
+];
+---
+
+<section>
+  <h2 class="noselect">Publications</h2>
+  <p class="filter-bar">
+    Filter by:
+    <button class="filter-btn active" data-cat="all">All Papers</button>
+    <button class="filter-btn" data-cat="selected">Selected Papers</button>
+    <button class="filter-btn" data-cat="vla">Robot Learning</button>
+    <button class="filter-btn" data-cat="vlm">Vision-Language</button>
+    <button class="filter-btn" data-cat="other">Other Topics</button>
+  </p>
+
+  <div id="publications-container">
+    {pubs.map((pub) => (
+      <div
+        class={`publication row clearfix${pub.highlight ? ' highlighted' : ''}`}
+        data-categories={pub.categories.join(',')}
+      >
+        <div class="pub-media" style={pub.media?.type === 'image' ? `background-image:url(${pub.media.src});background-size:cover;background-position:center;` : ''}>
+          {pub.media?.type === 'video' && (
+            <video autoplay muted loop playsinline>
+              <source src={pub.media.src} type="video/mp4" />
+            </video>
+          )}
+        </div>
+        <div class="pub-text">
+          <a class="paper-title" href={pub.links[0]?.href || '#'}>{pub.title}</a><br />
+          <span class="paper-authors" set:html={pub.authors} /><br />
+          <span class="paper-venue" set:html={pub.venue} />, {pub.year}
+          {pub.award && <span style="color:#f04328;font-weight:600;"> ({pub.award})</span>}
+          <br />
+          <span class="paper-links">
+            {pub.links.map((link) => (
+              <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
+            ))}
+          </span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const pubs = document.querySelectorAll<HTMLElement>('#publications-container .publication');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = (btn as HTMLElement).dataset.cat!;
+
+      pubs.forEach(pub => {
+        const cats = pub.dataset.categories?.split(',') || [];
+        pub.style.display = (cat === 'all' || cats.includes(cat)) ? '' : 'none';
+      });
+    });
+  });
+</script>
