@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeHeadingEn from './src/plugins/rehype-heading-en.ts';
 
 export default defineConfig({
-  site: 'https://your-name.me',
+  site: 'https://litiangong.com',
   markdown: {
     remarkPlugins: [remarkGfm, remarkMath, remarkSidenotes, remarkCitations],
     rehypePlugins: [rehypeHeadingEn, rehypeKatex],
