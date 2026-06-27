@@ -15,8 +15,17 @@ const { title, description } = Astro.props;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content={description || title} />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Litian Gong" />
   <title>{title}</title>
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description || title} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:site_name" content="Litian Gong" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

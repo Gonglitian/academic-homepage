@@ -5,9 +5,11 @@ import remarkSidenotes from './src/plugins/remark-sidenotes.ts';
 import remarkCitations from './src/plugins/remark-citations.ts';
 import rehypeKatex from 'rehype-katex';
 import rehypeHeadingEn from './src/plugins/rehype-heading-en.ts';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://litiangong.com',
+  integrations: [sitemap()],
   markdown: {
     remarkPlugins: [remarkGfm, remarkMath, remarkSidenotes, remarkCitations],
     rehypePlugins: [rehypeHeadingEn, rehypeKatex],
