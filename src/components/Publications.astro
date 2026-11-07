@@ -44,9 +44,10 @@ const pubs: Pub[] = [
     ]),
     venue: "",
     year: 2027,
-    status: "In submission to <b>ICRA</b> 2027",
+    status: "In submission",
     categories: ["vla"],
     equalContribution: true,
+    media: { type: "image", src: "/images/human-following.gif" },
     links: [],
   },
   {
@@ -73,10 +74,15 @@ const pubs: Pub[] = [
     ]),
     venue: "",
     year: 2027,
-    status: "In submission to <b>ICRA</b> 2027",
+    status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    links: [],
+    media: { type: "image", src: "/images/axis-bench.gif" },
+    links: [
+      { label: "project page", href: "https://axis-bench.github.io/", cls: "btn-orange" },
+      { label: "arXiv", href: "https://arxiv.org/abs/2610.18869", cls: "btn-red" },
+      { label: "code", href: "https://github.com/axis-bench/axis-bench" },
+    ],
   },
   {
     title: "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation",
@@ -94,10 +100,14 @@ const pubs: Pub[] = [
     ]),
     venue: "",
     year: 2026,
-    status: "In submission to <b>NeurIPS</b> 2026",
+    status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    links: [],
+    media: { type: "image", src: "/images/libero-perm.gif" },
+    links: [
+      { label: "project page", href: "https://libero-perm.github.io/", cls: "btn-orange" },
+      { label: "arXiv", href: "https://arxiv.org/abs/2610.22372", cls: "btn-red" },
+    ],
   },
   {
     title: "PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly",
@@ -113,7 +123,12 @@ const pubs: Pub[] = [
     venue: "Conference on Robot Learning (<b>CoRL</b>)",
     year: 2026,
     categories: ["selected", "vla"],
-    links: [],
+    media: { type: "image", src: "/images/pacer.gif" },
+    links: [
+      { label: "project page", href: "https://pacer-corl.github.io/", cls: "btn-orange" },
+      { label: "arXiv", href: "https://arxiv.org/abs/2610.19248", cls: "btn-red" },
+      { label: "code", href: "https://github.com/ChangChrisLiu/PACER" },
+    ],
   },
   {
     title: "AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations",
@@ -129,7 +144,7 @@ const pubs: Pub[] = [
     year: 2026,
     categories: ["selected", "vla", "il"],
     highlight: true,
-    media: { type: "image", src: "/images/autofocus-il.png" },
+    media: { type: "image", src: "/images/autofocus-il.gif" },
     links: [
       { label: "project page", href: "https://autofocus-il.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2511.18617", cls: "btn-red" },
@@ -150,7 +165,7 @@ const pubs: Pub[] = [
     year: 2026,
     categories: ["selected", "vlm"],
     equalContribution: true,
-    media: { type: "image", src: "/images/oric.png" },
+    media: { type: "image", src: "/images/oric.webp" },
     links: [
       { label: "arXiv", href: "https://arxiv.org/abs/2509.15695", cls: "btn-red" },
       { label: "code", href: "https://github.com/ZhaoyangLi-1/ORIC" },
@@ -194,11 +209,13 @@ const pubs: Pub[] = [
         data-categories={pub.categories.join(',')}
       >
         {pub.media && (
-          <div class="pub-media" style={pub.media.type === 'image' ? `background-image:url(${pub.media.src});background-size:cover;background-position:center;` : ''}>
-            {pub.media.type === 'video' && (
+          <div class="pub-media">
+            {pub.media.type === 'video' ? (
               <video autoplay muted loop playsinline>
                 <source src={pub.media.src} type="video/mp4" />
               </video>
+            ) : (
+              <img src={pub.media.src} alt="" />
             )}
           </div>
         )}

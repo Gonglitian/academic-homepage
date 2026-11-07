@@ -210,8 +210,12 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 /* ===== Publication List ===== */
 .publication { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); transition: background 0.2s; }
 .publication:last-child { border-bottom: none; }
-.pub-media { width: 160px; flex-shrink: 0; border-radius: 6px; overflow: hidden; background: var(--border); min-height: 100px; background-size: cover; background-position: center; }
-.pub-media video { width: 100%; height: auto; display: block; }
+.pub-media {
+  width: 188px; aspect-ratio: 16 / 9; flex-shrink: 0; align-self: flex-start;
+  border-radius: 6px; overflow: hidden; background: var(--bg-soft);
+  border: 1px solid var(--border);
+}
+.pub-media img, .pub-media video { width: 100%; height: 100%; object-fit: contain; display: block; background: var(--bg-soft); }
 .pub-text { flex: 1; min-width: 0; }
 .pub-text .paper-title { font-weight: 600; font-size: calc(1.2rem * var(--g) * var(--fs-hp-pub-title)); line-height: 1.5; color: var(--text-strong); }
 .pub-text .paper-authors { font-size: calc(1.1rem * var(--g) * var(--fs-hp-pub-authors)); line-height: 1.5; margin: 3px 0; }
