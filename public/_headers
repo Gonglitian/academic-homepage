@@ -1,0 +1,3 @@
+# Shorter than Cloudflare's 4-hour default so a same-name image replace is not stuck all afternoon.
+/images/*
+  Cache-Control: public, max-age=3600

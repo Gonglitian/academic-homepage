@@ -404,15 +404,15 @@ html.dark .blog-post pre.astro-code span { color: var(--shiki-dark) !important; 
 .visitor-map { margin: 40px 0 8px; }
 .visitor-map h2 { margin-bottom: 0.6em; }
 .visitor-map-frame { display: flex; justify-content: center; }
-.visitor-map-frame img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--border); }
-.visitor-map-placeholder {
-  display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
-  width: 100%; max-width: 420px; padding: 1.8rem 1.4rem;
-  border: 1px dashed var(--border); border-radius: 8px;
-  color: var(--text-muted); text-align: center;
+.visitor-globe { margin: 0; text-align: center; width: min(240px, 70vw); }
+.visitor-globe canvas { width: 100%; height: auto; display: block; }
+.visitor-globe figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  min-height: 1.4em;
 }
-.visitor-map-placeholder svg { width: 56px; height: 56px; color: var(--text-muted); opacity: 0.7; }
-.visitor-map-placeholder p { font-size: 0.9rem; line-height: 1.5; margin: 0; max-width: 32ch; }
 
 /* =====================================================================
    SIDENOTES

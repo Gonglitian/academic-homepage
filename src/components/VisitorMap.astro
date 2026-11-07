@@ -1,43 +1,171 @@
 ---
 /**
- * VisitorMap — a globe/map of where visitors come from, shown at the bottom of the homepage.
- *
- * NOTE: visitor tracking only works on the DEPLOYED site (a public domain), not on
- * localhost, and the embed is keyed to YOUR account. To activate:
- *   1. Sign up free at https://mapmyvisitors.com  (alt: https://www.revolvermaps2.com)
- *   2. Add your domain, then copy the widget id from the snippet they give you
- *      (it looks like:  mapmyvisitors.com/web/<ID>  /  map.png?d=<ID>&...).
- *   3. Paste that id into `widgetId` below. The placeholder is replaced automatically.
- *
- * Privacy note: this embeds a 3rd-party tracker — every visitor's IP/location is sent
- * to that service. That's exactly what this widget is for, but it's worth knowing.
+ * Visitors — a small orthographic globe.
+ * On Cloudflare Pages, /api/visitor reads request.cf (country, city, lat, lon).
+ * No account or secret. The dot is this visit, not a stored history of other people.
  */
-const widgetId = ""; // <-- paste your MapMyVisitors widget id here to go live
-// Static map image params (only used once widgetId is set). Tweak colors to taste.
-const mapSrc = widgetId
-  ? `https://mapmyvisitors.com/map.png?d=${widgetId}&cl=ffffff&w=a`
-  : "";
 ---
 
 <section class="visitor-map noselect" aria-label="Visitor map">
   <h2>Visitors</h2>
   <div class="visitor-map-frame">
-    {widgetId ? (
-      <a href={`https://mapmyvisitors.com/web/${widgetId}`} title="Visitor map" target="_blank" rel="noopener">
-        <img src={mapSrc} alt="Map of recent visitors by location" loading="lazy" />
-      </a>
-    ) : (
-      <div class="visitor-map-placeholder">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
-          <circle cx="32" cy="32" r="26" />
-          <ellipse cx="32" cy="32" rx="11" ry="26" />
-          <ellipse cx="32" cy="32" rx="26" ry="11" />
-          <line x1="6" y1="32" x2="58" y2="32" />
-          <line x1="32" y1="6" x2="32" y2="58" />
-        </svg>
-        <p>A live globe of visitor locations will appear here once the site is
-        deployed and the widget id is configured.</p>
-      </div>
-    )}
+    <figure class="visitor-globe">
+      <canvas id="visitor-globe" width="280" height="280" aria-label="Globe marking this visit"></canvas>
+      <figcaption id="visitor-globe-caption"></figcaption>
+    </figure>
   </div>
 </section>
+
+<script>
+  const section = document.querySelector('.visitor-map');
+  const canvas = document.getElementById('visitor-globe');
+  const caption = document.getElementById('visitor-globe-caption');
+  if (section instanceof HTMLElement && canvas instanceof HTMLCanvasElement && caption) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const size = 280;
+      canvas.width = Math.round(size * dpr);
+      canvas.height = Math.round(size * dpr);
+      ctx.scale(dpr, dpr);
+
+      let rot = 20;
+      let point: { lat: number; lon: number } | null = null;
+      let running = false;
+      let raf = 0;
+      let loaded = false;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const cssVar = (name: string, fallback: string) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+
+      const project = (lat: number, lon: number, rotDeg: number) => {
+        const phi = (lat * Math.PI) / 180;
+        const lambda = ((lon + rotDeg) * Math.PI) / 180;
+        return {
+          x: Math.cos(phi) * Math.sin(lambda),
+          y: Math.sin(phi),
+          z: Math.cos(phi) * Math.cos(lambda),
+        };
+      };
+
+      const draw = () => {
+        const stroke = cssVar('--text-muted', '#666666');
+        const dot = cssVar('--link', '#3b6f9f');
+        const bg = cssVar('--bg', '#fffff8');
+        ctx.clearRect(0, 0, size, size);
+        const c = size / 2;
+        const r = size * 0.42;
+        ctx.beginPath();
+        ctx.arc(c, c, r, 0, Math.PI * 2);
+        ctx.fillStyle = bg;
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(c, c, r - 0.5, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.globalAlpha = 0.45;
+        ctx.lineWidth = 1;
+        for (let lat = -60; lat <= 60; lat += 30) {
+          ctx.beginPath();
+          let started = false;
+          for (let lon = -180; lon <= 180; lon += 3) {
+            const p = project(lat, lon, rot);
+            if (p.z <= 0.02) { started = false; continue; }
+            const x = c + p.x * r;
+            const y = c - p.y * r;
+            if (!started) { ctx.moveTo(x, y); started = true; }
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        for (let lon = -150; lon < 180; lon += 30) {
+          ctx.beginPath();
+          let started = false;
+          for (let lat = -80; lat <= 80; lat += 3) {
+            const p = project(lat, lon, rot);
+            if (p.z <= 0.02) { started = false; continue; }
+            const x = c + p.x * r;
+            const y = c - p.y * r;
+            if (!started) { ctx.moveTo(x, y); started = true; }
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        if (point) {
+          const p = project(point.lat, point.lon, rot);
+          if (p.z > 0.02) {
+            const x = c + p.x * r;
+            const y = c - p.y * r;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = dot;
+            ctx.globalAlpha = 0.22;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      };
+
+      const tick = () => {
+        if (!reduce) rot = (rot + 0.12) % 360;
+        draw();
+        if (running) raf = requestAnimationFrame(tick);
+      };
+
+      const start = () => {
+        if (running) return;
+        running = true;
+        draw();
+        if (!reduce) raf = requestAnimationFrame(tick);
+      };
+
+      const stop = () => {
+        running = false;
+        cancelAnimationFrame(raf);
+      };
+
+      const load = () => {
+        if (loaded) return;
+        loaded = true;
+        fetch('/api/visitor', { cache: 'no-store' })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data: { ok?: boolean; city?: string; region?: string; country?: string; lat?: number; lon?: number } | null) => {
+            if (!data?.ok || typeof data.lat !== 'number' || typeof data.lon !== 'number') {
+              caption.textContent = 'Location appears here on the live site.';
+              return;
+            }
+            point = { lat: data.lat, lon: data.lon };
+            rot = -data.lon;
+            const place = [data.city, data.region, data.country].filter(Boolean).join(', ');
+            caption.textContent = place ? `This visit · ${place}` : 'This visit';
+            draw();
+          })
+          .catch(() => {
+            caption.textContent = 'Location appears here on the live site.';
+          });
+      };
+
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            start();
+            load();
+          } else {
+            stop();
+          }
+        }
+      }, { rootMargin: '160px' });
+      io.observe(section);
+    }
+  }
+</script>
