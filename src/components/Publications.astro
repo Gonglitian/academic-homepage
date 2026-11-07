@@ -14,13 +14,16 @@ interface Pub {
   equalContribution?: boolean;
 }
 
-function formatAuthors(names: string[]): string {
-  return names
-    .map((name) => {
+function formatAuthors(people: { name: string; href?: string }[]): string {
+  return people
+    .map(({ name, href }) => {
       const star = name.endsWith("*") ? "*" : "";
       const base = star ? name.slice(0, -1) : name;
-      if (base === "Litian Gong") return `<span class='bold'>Litian Gong${star}</span>`;
-      return name;
+      const label = base === "Litian Gong"
+        ? `<span class='bold'>Litian Gong${star}</span>`
+        : `${base}${star}`;
+      if (base === "Litian Gong" || !href) return label;
+      return `<a href="${href}">${label}</a>`;
     })
     .join(", ");
 }
@@ -29,18 +32,18 @@ const pubs: Pub[] = [
   {
     title: "Closed-Loop Customizable Human Following via Distilling Distance-Ordered Constrained Policies",
     authors: formatAuthors([
-      "Litian Gong*",
-      "Shiting Gong*",
-      "Jianpeng Yao*",
-      "Hefeifei Jiang",
-      "Huaide Jiang",
-      "Jinfeng Wang",
-      "Zheyu Lin",
-      "Zhaoyang Li",
-      "Yang Zhou",
-      "Ye Zhao",
-      "Mingyu Ding",
-      "Jiachen Li",
+      { name: "Litian Gong*" },
+      { name: "Shiting Gong*" },
+      { name: "Jianpeng Yao*", href: "https://jianpengyao.github.io/" },
+      { name: "Hefeifei Jiang", href: "https://jianghefeifei.github.io/" },
+      { name: "Huaide Jiang" },
+      { name: "Jinfeng Wang" },
+      { name: "Zheyu Lin" },
+      { name: "Zhaoyang Li", href: "https://github.com/ZhaoyangLi-1" },
+      { name: "Yang Zhou" },
+      { name: "Ye Zhao" },
+      { name: "Mingyu Ding", href: "https://dingmyu.github.io/" },
+      { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
     ]),
     venue: "",
     year: 2027,
@@ -53,30 +56,33 @@ const pubs: Pub[] = [
   {
     title: "What Matters in Quality-Aware VLA Pretraining: A Benchmark and Empirical Study",
     authors: formatAuthors([
-      "Mingxuan Yan*",
-      "Litian Gong*",
-      "Dihong Huang*",
-      "Zhixu Li",
-      "Tianyu Zhang",
-      "Wenqian Zhang",
-      "Hefeifei Jiang",
-      "Peihao Li",
-      "Mengfei Zhao",
-      "Yikai Tang",
-      "Hai Zhai",
-      "Zehao Wang",
-      "Kaiyu Hang",
-      "Minghui Zheng",
-      "Zhiwen Fan",
-      "Masayoshi Tomizuka",
-      "Jianfei Yang",
-      "Jiachen Li",
+      { name: "Mingxuan Yan", href: "https://waterhyacinthinnanhu.github.io/" },
+      { name: "Litian Gong" },
+      { name: "Dihong Huang", href: "https://www.ri.cmu.edu/ri-people/dihong-huang/" },
+      { name: "Zhixu Li", href: "https://www.cs.ucr.edu/~zli538/" },
+      { name: "Tianyu Zhang" },
+      { name: "Wenqian Zhang", href: "https://www.wenqianzhang.com/" },
+      { name: "Hefeifei Jiang", href: "https://jianghefeifei.github.io/" },
+      { name: "Peihao Li", href: "https://peihao.li/" },
+      { name: "Jian Zhang" },
+      { name: "Mengfei Zhao", href: "https://murphyzhao.com/" },
+      { name: "Yikai Tang", href: "https://wintermelooooo.github.io/" },
+      { name: "Hai Zhai" },
+      { name: "Zehao Wang", href: "https://zehaowang983.github.io/" },
+      { name: "Ruijian Liang" },
+      { name: "Yanjia Huang" },
+      { name: "Lin Shao", href: "https://linsats.github.io/" },
+      { name: "Changliu Liu", href: "http://www.cs.cmu.edu/~cliu6/" },
+      { name: "Kaiyu Hang", href: "https://hangkaiyu.github.io/" },
+      { name: "Zhiwen Fan", href: "https://phai-lab.github.io/" },
+      { name: "Masayoshi Tomizuka", href: "https://me.berkeley.edu/people/masayoshi-tomizuka/" },
+      { name: "Jianfei Yang", href: "https://marsyang.site/" },
+      { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
     ]),
     venue: "",
     year: 2027,
     status: "In submission",
     categories: ["vla"],
-    equalContribution: true,
     media: { type: "image", src: "/images/axis-bench.gif" },
     links: [
       { label: "project page", href: "https://axis-bench.github.io/", cls: "btn-orange" },
@@ -87,16 +93,16 @@ const pubs: Pub[] = [
   {
     title: "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation",
     authors: formatAuthors([
-      "Zhixu Li*",
-      "Litian Gong*",
-      "Keqian Tang",
-      "Jingyu Yao",
-      "Wenqian Zhang",
-      "Tianze Xu",
-      "Zehao Wang",
-      "Yuping Wang",
-      "Junge Zhang",
-      "Jiachen Li",
+      { name: "Zhixu Li*", href: "https://www.cs.ucr.edu/~zli538/" },
+      { name: "Keqian Tang*" },
+      { name: "Litian Gong*" },
+      { name: "Jingyu Yao" },
+      { name: "Wenqian Zhang", href: "https://www.wenqianzhang.com/" },
+      { name: "Tianze Xu" },
+      { name: "Zehao Wang", href: "https://zehaowang983.github.io/" },
+      { name: "Yuping Wang" },
+      { name: "Junge Zhang", href: "https://tasl-lab.github.io/members/junge-zhang.html" },
+      { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
     ]),
     venue: "",
     year: 2026,
@@ -112,13 +118,13 @@ const pubs: Pub[] = [
   {
     title: "PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly",
     authors: formatAuthors([
-      "Chang Liu",
-      "Sibo Tian",
-      "Litian Gong",
-      "Zhiwen Fan",
-      "Jiachen Li",
-      "Xiao Liang",
-      "Minghui Zheng",
+      { name: "Chang Liu", href: "https://github.com/ChangChrisLiu" },
+      { name: "Sibo Tian", href: "https://zh.engr.tamu.edu/people-2/" },
+      { name: "Litian Gong" },
+      { name: "Zhiwen Fan", href: "https://phai-lab.github.io/" },
+      { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
+      { name: "Xiao Liang", href: "https://sites.google.com/view/rise-tamu" },
+      { name: "Minghui Zheng", href: "https://engineering.tamu.edu/mechanical/profiles/zheng-minghui.html" },
     ]),
     venue: "Conference on Robot Learning (<b>CoRL</b>)",
     year: 2026,
@@ -133,12 +139,12 @@ const pubs: Pub[] = [
   {
     title: "AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations",
     authors: formatAuthors([
-      "Litian Gong",
-      "Fatemeh Bahrani",
-      "Yutai Zhou",
-      "Amin Banayeeanzade",
-      "Jiachen Li",
-      "Erdem Bıyık",
+      { name: "Litian Gong" },
+      { name: "Fatemeh Bahrani", href: "https://nfbahrani.github.io/" },
+      { name: "Yutai Zhou", href: "https://liralab.usc.edu/people/" },
+      { name: "Amin Banayeeanzade", href: "https://aminbana.github.io/" },
+      { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
+      { name: "Erdem Bıyık", href: "https://ebiyik.github.io/" },
     ]),
     venue: "IEEE International Conference on Robotics and Automation (<b>ICRA</b>)",
     year: 2026,
@@ -154,12 +160,12 @@ const pubs: Pub[] = [
   {
     title: "ORIC: Benchmarking Object Recognition in Incongruous Context for Large Vision-Language Models",
     authors: formatAuthors([
-      "Zhaoyang Li*",
-      "Zhan Ling*",
-      "Yuchen Zhou",
-      "Litian Gong",
-      "Erdem Bıyık",
-      "Hao Su",
+      { name: "Zhaoyang Li*", href: "https://github.com/ZhaoyangLi-1" },
+      { name: "Zhan Ling*", href: "https://lz1oceani.github.io/" },
+      { name: "Yuchen Zhou" },
+      { name: "Litian Gong" },
+      { name: "Erdem Bıyık", href: "https://ebiyik.github.io/" },
+      { name: "Hao Su", href: "https://www.haosu.ai/" },
     ]),
     venue: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (<b>CVPR</b>)",
     year: 2026,
@@ -174,10 +180,10 @@ const pubs: Pub[] = [
   {
     title: "A Friendly Grid-connected Distribution System with PV and ESS for Remote Rural Residential Family",
     authors: formatAuthors([
-      "Litian Gong",
-      "Jiaxuan Ren",
-      "Shuoyu Jin",
-      "Shaorong Wang",
+      { name: "Litian Gong" },
+      { name: "Jiaxuan Ren" },
+      { name: "Shuoyu Jin" },
+      { name: "Shaorong Wang", href: "http://en.seee.hust.edu.cn/info/1057/1336.htm" },
     ]),
     venue: "IEEE International Conference on New Energy and Power Engineering (<b>ICNEPE</b>)",
     year: 2023,
