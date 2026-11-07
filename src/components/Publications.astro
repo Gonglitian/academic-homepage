@@ -7,16 +7,124 @@ interface Pub {
   categories: string[];
   links: { label: string; href: string; cls?: string }[];
   media?: { type: 'video'; src: string } | { type: 'image'; src: string };
+  /** Shown instead of "venue, year" for manuscripts that are not yet published. */
+  status?: string;
   highlight?: boolean;
   award?: string;
+  equalContribution?: boolean;
 }
 
-const nameStrong = "<span class='bold'>Litian Gong</span>";
+function formatAuthors(names: string[]): string {
+  return names
+    .map((name) => {
+      const star = name.endsWith("*") ? "*" : "";
+      const base = star ? name.slice(0, -1) : name;
+      if (base === "Litian Gong") return `<span class='bold'>Litian Gong${star}</span>`;
+      return name;
+    })
+    .join(", ");
+}
 
 const pubs: Pub[] = [
   {
+    title: "Closed-Loop Customizable Human Following via Distilling Distance-Ordered Constrained Policies",
+    authors: formatAuthors([
+      "Litian Gong*",
+      "Shiting Gong*",
+      "Jianpeng Yao*",
+      "Hefeifei Jiang",
+      "Huaide Jiang",
+      "Jinfeng Wang",
+      "Zheyu Lin",
+      "Zhaoyang Li",
+      "Yang Zhou",
+      "Ye Zhao",
+      "Mingyu Ding",
+      "Jiachen Li",
+    ]),
+    venue: "",
+    year: 2027,
+    status: "In submission to <b>ICRA</b> 2027",
+    categories: ["vla"],
+    equalContribution: true,
+    links: [],
+  },
+  {
+    title: "What Matters in Quality-Aware VLA Pretraining: A Benchmark and Empirical Study",
+    authors: formatAuthors([
+      "Mingxuan Yan*",
+      "Litian Gong*",
+      "Dihong Huang*",
+      "Zhixu Li",
+      "Tianyu Zhang",
+      "Wenqian Zhang",
+      "Hefeifei Jiang",
+      "Peihao Li",
+      "Mengfei Zhao",
+      "Yikai Tang",
+      "Hai Zhai",
+      "Zehao Wang",
+      "Kaiyu Hang",
+      "Minghui Zheng",
+      "Zhiwen Fan",
+      "Masayoshi Tomizuka",
+      "Jianfei Yang",
+      "Jiachen Li",
+    ]),
+    venue: "",
+    year: 2027,
+    status: "In submission to <b>ICRA</b> 2027",
+    categories: ["vla"],
+    equalContribution: true,
+    links: [],
+  },
+  {
+    title: "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation",
+    authors: formatAuthors([
+      "Zhixu Li*",
+      "Litian Gong*",
+      "Keqian Tang",
+      "Jingyu Yao",
+      "Wenqian Zhang",
+      "Tianze Xu",
+      "Zehao Wang",
+      "Yuping Wang",
+      "Junge Zhang",
+      "Jiachen Li",
+    ]),
+    venue: "",
+    year: 2026,
+    status: "In submission to <b>NeurIPS</b> 2026",
+    categories: ["vla"],
+    equalContribution: true,
+    links: [],
+  },
+  {
+    title: "PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly",
+    authors: formatAuthors([
+      "Chang Liu",
+      "Sibo Tian",
+      "Litian Gong",
+      "Zhiwen Fan",
+      "Jiachen Li",
+      "Xiao Liang",
+      "Minghui Zheng",
+    ]),
+    venue: "Conference on Robot Learning (<b>CoRL</b>)",
+    year: 2026,
+    categories: ["selected", "vla"],
+    links: [],
+  },
+  {
     title: "AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations",
-    authors: `${nameStrong}, Fatemeh Bahrani, Yutai Zhou, Amin Banayeeanzade, Jiachen Li, Erdem Bıyık`,
+    authors: formatAuthors([
+      "Litian Gong",
+      "Fatemeh Bahrani",
+      "Yutai Zhou",
+      "Amin Banayeeanzade",
+      "Jiachen Li",
+      "Erdem Bıyık",
+    ]),
     venue: "IEEE International Conference on Robotics and Automation (<b>ICRA</b>)",
     year: 2026,
     categories: ["selected", "vla", "il"],
@@ -29,11 +137,19 @@ const pubs: Pub[] = [
     ],
   },
   {
-    title: "ORIC: Benchmarking Object Recognition under Contextual Incongruity in Large Vision-Language Models",
-    authors: `Zhaoyang Li*, Zhan Ling*, Yuchen Zhou, ${nameStrong}, Erdem Bıyık, Hao Su`,
+    title: "ORIC: Benchmarking Object Recognition in Incongruous Context for Large Vision-Language Models",
+    authors: formatAuthors([
+      "Zhaoyang Li*",
+      "Zhan Ling*",
+      "Yuchen Zhou",
+      "Litian Gong",
+      "Erdem Bıyık",
+      "Hao Su",
+    ]),
     venue: "IEEE/CVF Conference on Computer Vision and Pattern Recognition (<b>CVPR</b>)",
     year: 2026,
     categories: ["selected", "vlm"],
+    equalContribution: true,
     media: { type: "image", src: "/images/oric.png" },
     links: [
       { label: "arXiv", href: "https://arxiv.org/abs/2509.15695", cls: "btn-red" },
@@ -42,8 +158,13 @@ const pubs: Pub[] = [
   },
   {
     title: "A Friendly Grid-connected Distribution System with PV and ESS for Remote Rural Residential Family",
-    authors: `${nameStrong}, Jiaxuan Ren, Shuoyu Jin, Shaorong Wang`,
-    venue: "3rd International Conference on New Energy and Power Engineering (<b>ICNEPE</b>)",
+    authors: formatAuthors([
+      "Litian Gong",
+      "Jiaxuan Ren",
+      "Shuoyu Jin",
+      "Shaorong Wang",
+    ]),
+    venue: "IEEE International Conference on New Energy and Power Engineering (<b>ICNEPE</b>)",
     year: 2023,
     categories: ["other"],
     media: { type: "image", src: "/images/icnepe2023.png" },
@@ -64,6 +185,7 @@ const pubs: Pub[] = [
     <button class="filter-btn" data-cat="vlm">Vision-Language</button>
     <button class="filter-btn" data-cat="other">Other Topics</button>
   </p>
+  <p style="color:var(--text-muted);font-size:0.9rem;margin:-8px 0 12px;">* Equal contribution.</p>
 
   <div id="publications-container">
     {pubs.map((pub) => (
@@ -71,24 +193,41 @@ const pubs: Pub[] = [
         class={`publication row clearfix${pub.highlight ? ' highlighted' : ''}`}
         data-categories={pub.categories.join(',')}
       >
-        <div class="pub-media" style={pub.media?.type === 'image' ? `background-image:url(${pub.media.src});background-size:cover;background-position:center;` : ''}>
-          {pub.media?.type === 'video' && (
-            <video autoplay muted loop playsinline>
-              <source src={pub.media.src} type="video/mp4" />
-            </video>
-          )}
-        </div>
+        {pub.media && (
+          <div class="pub-media" style={pub.media.type === 'image' ? `background-image:url(${pub.media.src});background-size:cover;background-position:center;` : ''}>
+            {pub.media.type === 'video' && (
+              <video autoplay muted loop playsinline>
+                <source src={pub.media.src} type="video/mp4" />
+              </video>
+            )}
+          </div>
+        )}
         <div class="pub-text">
-          <a class="paper-title" href={pub.links[0]?.href || '#'}>{pub.title}</a><br />
-          <span class="paper-authors" set:html={pub.authors} /><br />
-          <span class="paper-venue" set:html={pub.venue} />, {pub.year}
-          {pub.award && <span style="color:#f04328;font-weight:600;"> ({pub.award})</span>}
+          {pub.links.length > 0 ? (
+            <a class="paper-title" href={pub.links[0].href}>{pub.title}</a>
+          ) : (
+            <span class="paper-title">{pub.title}</span>
+          )}
           <br />
-          <span class="paper-links">
-            {pub.links.map((link) => (
-              <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
-            ))}
-          </span>
+          <span class="paper-authors" set:html={pub.authors} /><br />
+          {pub.status ? (
+            <span class="paper-venue" set:html={pub.status} />
+          ) : (
+            <>
+              <span class="paper-venue" set:html={pub.venue} />, {pub.year}
+            </>
+          )}
+          {pub.award && <span style="color:#f04328;font-weight:600;"> ({pub.award})</span>}
+          {pub.links.length > 0 && (
+            <>
+              <br />
+              <span class="paper-links">
+                {pub.links.map((link) => (
+                  <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
+                ))}
+              </span>
+            </>
+          )}
         </div>
       </div>
     ))}
