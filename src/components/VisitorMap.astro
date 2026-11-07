@@ -1,171 +1,61 @@
 ---
-/**
- * Visitors — a small orthographic globe.
- * On Cloudflare Pages, /api/visitor reads request.cf (country, city, lat, lon).
- * No account or secret. The dot is this visit, not a stored history of other people.
- */
+const widgetId = "maYGjgki4VXNEU7R1kt2DutVY5p0wHza_8Dj3yXMBMA";
+const src = `https://mapmyvisitors.com/globe.js?d=${widgetId}`;
 ---
 
 <section class="visitor-map noselect" aria-label="Visitor map">
   <h2>Visitors</h2>
   <div class="visitor-map-frame">
-    <figure class="visitor-globe">
-      <canvas id="visitor-globe" width="280" height="280" aria-label="Globe marking this visit"></canvas>
-      <figcaption id="visitor-globe-caption"></figcaption>
-    </figure>
+    <div id="visitor-globe-slot" class="visitor-globe-slot">
+      <p class="visitor-map-fallback" hidden>Visitor globe unavailable.</p>
+    </div>
   </div>
 </section>
 
-<script>
+<script define:vars={{ src }}>
   const section = document.querySelector('.visitor-map');
-  const canvas = document.getElementById('visitor-globe');
-  const caption = document.getElementById('visitor-globe-caption');
-  if (section instanceof HTMLElement && canvas instanceof HTMLCanvasElement && caption) {
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const size = 280;
-      canvas.width = Math.round(size * dpr);
-      canvas.height = Math.round(size * dpr);
-      ctx.scale(dpr, dpr);
-
-      let rot = 20;
-      let point: { lat: number; lon: number } | null = null;
-      let running = false;
-      let raf = 0;
-      let loaded = false;
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      const cssVar = (name: string, fallback: string) =>
-        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
-
-      const project = (lat: number, lon: number, rotDeg: number) => {
-        const phi = (lat * Math.PI) / 180;
-        const lambda = ((lon + rotDeg) * Math.PI) / 180;
-        return {
-          x: Math.cos(phi) * Math.sin(lambda),
-          y: Math.sin(phi),
-          z: Math.cos(phi) * Math.cos(lambda),
-        };
-      };
-
-      const draw = () => {
-        const stroke = cssVar('--text-muted', '#666666');
-        const dot = cssVar('--link', '#3b6f9f');
-        const bg = cssVar('--bg', '#fffff8');
-        ctx.clearRect(0, 0, size, size);
-        const c = size / 2;
-        const r = size * 0.42;
-        ctx.beginPath();
-        ctx.arc(c, c, r, 0, Math.PI * 2);
-        ctx.fillStyle = bg;
-        ctx.fill();
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(c, c, r - 0.5, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.globalAlpha = 0.45;
-        ctx.lineWidth = 1;
-        for (let lat = -60; lat <= 60; lat += 30) {
-          ctx.beginPath();
-          let started = false;
-          for (let lon = -180; lon <= 180; lon += 3) {
-            const p = project(lat, lon, rot);
-            if (p.z <= 0.02) { started = false; continue; }
-            const x = c + p.x * r;
-            const y = c - p.y * r;
-            if (!started) { ctx.moveTo(x, y); started = true; }
-            else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
+  const slot = document.getElementById('visitor-globe-slot');
+  const fallback = slot?.querySelector('.visitor-map-fallback');
+  if (section && slot) {
+    let started = false;
+    const showFallback = () => {
+      if (fallback instanceof HTMLElement) fallback.hidden = false;
+    };
+    const loaded = () => {
+      // globe.js binds its reveal to window "load", which has already fired
+      // by the time this section is near the viewport. Nudge that isolated jQuery.
+      let tries = 0;
+      const kick = () => {
+        const outer = slot.querySelector('.mmvst_outer');
+        const jq = window.globe_jq;
+        if (outer && jq) {
+          try { jq(window).trigger('load'); } catch (e) {}
+          window.dispatchEvent(new Event('scroll'));
+          return;
         }
-        for (let lon = -150; lon < 180; lon += 30) {
-          ctx.beginPath();
-          let started = false;
-          for (let lat = -80; lat <= 80; lat += 3) {
-            const p = project(lat, lon, rot);
-            if (p.z <= 0.02) { started = false; continue; }
-            const x = c + p.x * r;
-            const y = c - p.y * r;
-            if (!started) { ctx.moveTo(x, y); started = true; }
-            else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        if (point) {
-          const p = project(point.lat, point.lon, rot);
-          if (p.z > 0.02) {
-            const x = c + p.x * r;
-            const y = c - p.y * r;
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = dot;
-            ctx.globalAlpha = 0.22;
-            ctx.fill();
-            ctx.globalAlpha = 1;
-            ctx.beginPath();
-            ctx.arc(x, y, 2.6, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
+        tries += 1;
+        if (tries < 40) window.setTimeout(kick, 150);
+        else showFallback();
       };
-
-      const tick = () => {
-        if (!reduce) rot = (rot + 0.12) % 360;
-        draw();
-        if (running) raf = requestAnimationFrame(tick);
-      };
-
-      const start = () => {
-        if (running) return;
-        running = true;
-        draw();
-        if (!reduce) raf = requestAnimationFrame(tick);
-      };
-
-      const stop = () => {
-        running = false;
-        cancelAnimationFrame(raf);
-      };
-
-      const load = () => {
-        if (loaded) return;
-        loaded = true;
-        fetch('/api/visitor', { cache: 'no-store' })
-          .then((res) => (res.ok ? res.json() : null))
-          .then((data: { ok?: boolean; city?: string; region?: string; country?: string; lat?: number; lon?: number } | null) => {
-            if (!data?.ok || typeof data.lat !== 'number' || typeof data.lon !== 'number') {
-              caption.textContent = 'Location appears here on the live site.';
-              return;
-            }
-            point = { lat: data.lat, lon: data.lon };
-            rot = -data.lon;
-            const place = [data.city, data.region, data.country].filter(Boolean).join(', ');
-            caption.textContent = place ? `This visit · ${place}` : 'This visit';
-            draw();
-          })
-          .catch(() => {
-            caption.textContent = 'Location appears here on the live site.';
-          });
-      };
-
-      const io = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            start();
-            load();
-          } else {
-            stop();
-          }
-        }
-      }, { rootMargin: '160px' });
-      io.observe(section);
-    }
+      kick();
+    };
+    const load = () => {
+      if (started) return;
+      started = true;
+      const script = document.createElement('script');
+      script.id = 'mmvst_globe';
+      script.src = src;
+      script.async = true;
+      script.onerror = showFallback;
+      script.onload = loaded;
+      slot.appendChild(script);
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        load();
+        io.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    io.observe(section);
   }
 </script>

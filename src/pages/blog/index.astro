@@ -8,7 +8,10 @@ const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout title="Blog — Litian Gong" description="Technical blog about robot learning and AI research">
+<BaseLayout
+  title="Blog — Litian Gong (龚利天), PhD student, UC Riverside, robot learning"
+  description="Blog by Litian Gong (龚利天), a PhD student at UC Riverside, on robot learning, math, and AI research."
+>
   <div class="blog-wrapper blog-index">
     <Header />
 

@@ -6,7 +6,7 @@ interface Pub {
   year: number;
   categories: string[];
   links: { label: string; href: string; cls?: string }[];
-  media?: { type: 'video'; src: string } | { type: 'image'; src: string };
+  media?: { type: 'video'; src: string } | { type: 'image'; src: string; alt: string; width: number; height: number };
   /** Shown instead of "venue, year" for manuscripts that are not yet published. */
   status?: string;
   highlight?: boolean;
@@ -50,7 +50,7 @@ const pubs: Pub[] = [
     status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    media: { type: "image", src: "/images/hf_real_indoor_clip.gif" },
+    media: { type: "image", src: "/images/hf_real_indoor_clip.gif", alt: "Indoor human-following demo, two trajectories side by side", width: 520, height: 205 },
     links: [],
   },
   {
@@ -83,7 +83,7 @@ const pubs: Pub[] = [
     year: 2027,
     status: "In submission",
     categories: ["vla"],
-    media: { type: "image", src: "/images/axis-bench.gif" },
+    media: { type: "image", src: "/images/axis-bench.gif", alt: "AXIS-Bench robot manipulation preview", width: 640, height: 360 },
     links: [
       { label: "project page", href: "https://axis-bench.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.18869", cls: "btn-red" },
@@ -109,7 +109,7 @@ const pubs: Pub[] = [
     status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    media: { type: "image", src: "/images/libero-perm.gif" },
+    media: { type: "image", src: "/images/libero-perm.gif", alt: "LIBERO-PeRM personalized manipulation tasks", width: 720, height: 360 },
     links: [
       { label: "project page", href: "https://libero-perm.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.22372", cls: "btn-red" },
@@ -129,7 +129,7 @@ const pubs: Pub[] = [
     venue: "Conference on Robot Learning (<b>CoRL</b>)",
     year: 2026,
     categories: ["selected", "vla"],
-    media: { type: "image", src: "/images/pacer.gif" },
+    media: { type: "image", src: "/images/pacer.gif", alt: "PACER robotic disassembly preview", width: 600, height: 338 },
     links: [
       { label: "project page", href: "https://pacer-corl.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.19248", cls: "btn-red" },
@@ -150,7 +150,7 @@ const pubs: Pub[] = [
     year: 2026,
     categories: ["selected", "vla", "il"],
     highlight: true,
-    media: { type: "image", src: "/images/autofocus-il-v2.gif" },
+    media: { type: "image", src: "/images/autofocus-il-v2.gif", alt: "AutoFocus-IL driving and manipulation saliency", width: 676, height: 216 },
     links: [
       { label: "project page", href: "https://autofocus-il.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2511.18617", cls: "btn-red" },
@@ -171,7 +171,7 @@ const pubs: Pub[] = [
     year: 2026,
     categories: ["selected", "vlm"],
     equalContribution: true,
-    media: { type: "image", src: "/images/oric.webp" },
+    media: { type: "image", src: "/images/oric.webp", alt: "ORIC contextual object recognition examples", width: 1200, height: 647 },
     links: [
       { label: "arXiv", href: "https://arxiv.org/abs/2509.15695", cls: "btn-red" },
       { label: "code", href: "https://github.com/ZhaoyangLi-1/ORIC" },
@@ -188,15 +188,59 @@ const pubs: Pub[] = [
     venue: "IEEE International Conference on New Energy and Power Engineering (<b>ICNEPE</b>)",
     year: 2023,
     categories: ["other"],
-    media: { type: "image", src: "/images/icnepe2023-v2.png" },
+    media: { type: "image", src: "/images/icnepe2023-v2.png", alt: "Diagram of a grid-connected home PV and storage system", width: 1200, height: 581 },
     links: [
       { label: "DOI", href: "https://doi.org/10.1109/ICNEPE60694.2023.10429728", cls: "btn-dark" },
     ],
   },
 ];
+
+const siteOrigin = "https://litiangong.com";
+
+function plainAuthors(html: string): string[] {
+  return html
+    .replace(/<[^>]+>/g, "")
+    .split(",")
+    .map((name) => name.trim().replace(/\*+$/, ""))
+    .filter(Boolean);
+}
+
+function plainText(html: string): string {
+  return html.replace(/<[^>]+>/g, "").trim();
+}
+
+const publicationJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": pubs.map((pub) => {
+    const arxiv = pub.links.find((link) => link.label === "arXiv")?.href;
+    const doi = pub.links.find((link) => link.label === "DOI")?.href;
+    const project = pub.links.find((link) => link.label === "project page")?.href;
+    const node: Record<string, unknown> = {
+      "@type": "ScholarlyArticle",
+      headline: pub.title,
+      author: plainAuthors(pub.authors).map((name) =>
+        name === "Litian Gong"
+          ? { "@type": "Person", name, url: `${siteOrigin}/` }
+          : { "@type": "Person", name },
+      ),
+    };
+    // In-submission entries stay anonymous: no venue, publisher, or date.
+    if (!pub.status) {
+      node.datePublished = String(pub.year);
+      const venue = plainText(pub.venue);
+      if (venue) node.publisher = { "@type": "Organization", name: venue };
+    }
+    const url = arxiv || doi || project;
+    if (url) node.url = url;
+    const sameAs = [arxiv, doi, project].filter((item) => item && item !== url);
+    if (sameAs.length) node.sameAs = sameAs;
+    return node;
+  }),
+});
 ---
 
 <section>
+  <script type="application/ld+json" set:html={publicationJsonLd} />
   <h2 class="noselect">Publications</h2>
   <p class="filter-bar">
     Filter by:
@@ -221,7 +265,7 @@ const pubs: Pub[] = [
                 <source src={pub.media.src} type="video/mp4" />
               </video>
             ) : (
-              <img src={pub.media.src} alt="" />
+              <img src={pub.media.src} alt={pub.media.alt} width={pub.media.width} height={pub.media.height} loading="lazy" decoding="async" />
             )}
           </div>
         )}

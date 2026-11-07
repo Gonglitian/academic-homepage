@@ -404,14 +404,26 @@ html.dark .blog-post pre.astro-code span { color: var(--shiki-dark) !important; 
 .visitor-map { margin: 40px 0 8px; }
 .visitor-map h2 { margin-bottom: 0.6em; }
 .visitor-map-frame { display: flex; justify-content: center; }
-.visitor-globe { margin: 0; text-align: center; width: min(240px, 70vw); }
-.visitor-globe canvas { width: 100%; height: auto; display: block; }
-.visitor-globe figcaption {
-  margin-top: 0.45rem;
+.visitor-globe-slot {
+  width: 100%;
+  max-width: 420px;
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.visitor-globe-slot iframe,
+.visitor-globe-slot canvas,
+.visitor-globe-slot img,
+.visitor-globe-slot > div {
+  max-width: 100%;
+}
+.visitor-map-fallback {
+  margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;
   color: var(--text-muted);
-  min-height: 1.4em;
+  text-align: center;
 }
 
 /* =====================================================================

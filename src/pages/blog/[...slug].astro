@@ -13,16 +13,20 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const articleLang = /[\u4e00-\u9fff]/.test(post.data.title) ? 'zh' : 'en';
+const description = `${post.data.description} Litian Gong (龚利天), PhD student at UC Riverside, on robot learning.`;
 ---
 
 <BaseLayout
-  title={`${post.data.title} — Litian Gong`}
-  description={post.data.description}
+  title={`${post.data.title} — Litian Gong (龚利天), PhD student, UC Riverside, robot learning`}
+  description={description}
+  ogType="article"
 >
+  <link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <div class="blog-wrapper blog-article">
     <Header />
 
-    <article class="blog-post">
+    <article class="blog-post" lang={articleLang}>
       <h1>{post.data.title}</h1>
       <p class="article-byline">
         {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
