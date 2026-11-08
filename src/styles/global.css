@@ -1,27 +1,65 @@
 /* ===== et-book self-hosted (canonical tufte-css 1.8.0, local flat layout) ===== */
+/* Local faces scaled to et-book's advance width and win ascent/descent (upem 2048)
+   so a late swap does not reflow. Times and Liberation Serif share those metrics. */
+@font-face {
+  font-family: 'et-book-fallback';
+  src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif'), local('LiberationSerif');
+  font-weight: 400; font-style: normal;
+  size-adjust: 99.72%;
+  ascent-override: 89.57%;
+  descent-override: 30.94%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'et-book-fallback';
+  src: local('Times New Roman Bold'), local('TimesNewRomanPS-BoldMT'), local('Liberation Serif Bold'), local('LiberationSerif-Bold');
+  font-weight: 700; font-style: normal;
+  size-adjust: 95%;
+  ascent-override: 98.73%;
+  descent-override: 32.48%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'et-book-fallback';
+  src: local('Times New Roman Italic'), local('TimesNewRomanPS-ItalicMT'), local('Liberation Serif Italic'), local('LiberationSerif-Italic');
+  font-weight: 400; font-style: italic;
+  size-adjust: 99.72%;
+  ascent-override: 89.57%;
+  descent-override: 30.94%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-roman-line-figures.woff') format('woff'),
-       url('/fonts/et-book/et-book-roman-line-figures.ttf') format('truetype');
+  src: url('/fonts/et-book/et-book-roman-line-figures.woff2') format('woff2'),
+       url('/fonts/et-book/et-book-roman-line-figures.woff') format('woff');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-display-italic-old-style-figures.woff') format('woff'),
-       url('/fonts/et-book/et-book-display-italic-old-style-figures.ttf') format('truetype');
-  font-weight: 400; font-style: italic; font-display: swap;
+  src: url('/fonts/et-book/et-book-display-italic-old-style-figures.woff2') format('woff2'),
+       url('/fonts/et-book/et-book-display-italic-old-style-figures.woff') format('woff');
+  font-weight: 400; font-style: italic; font-display: optional;
 }
 @font-face {
   font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-bold-line-figures.woff') format('woff'),
-       url('/fonts/et-book/et-book-bold-line-figures.ttf') format('truetype');
+  src: url('/fonts/et-book/et-book-bold-line-figures.woff2') format('woff2'),
+       url('/fonts/et-book/et-book-bold-line-figures.woff') format('woff');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'et-book-roman-old-style';
-  src: url('/fonts/et-book/et-book-roman-old-style-figures.woff') format('woff'),
-       url('/fonts/et-book/et-book-roman-old-style-figures.ttf') format('truetype');
-  font-weight: 400; font-style: normal; font-display: swap;
+  src: url('/fonts/et-book/et-book-roman-old-style-figures.woff2') format('woff2'),
+       url('/fonts/et-book/et-book-roman-old-style-figures.woff') format('woff');
+  font-weight: 400; font-style: normal; font-display: optional;
+}
+/* Only the few Chinese characters on the homepage. optional: never swap in late. */
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('/fonts/noto/noto-serif-sc-name.woff2') format('woff2');
+  unicode-range: U+300C-300D, U+5229, U+5929, U+9F9A;
 }
 
 /* ===== CSS Variables ===== */
@@ -29,8 +67,7 @@
   /* Font families (switchable by the type-tune panel).
      CJK falls to system serif (Songti) first — like the reference, which uses no CJK webfont
      and renders slightly heavier/darker than Noto Serif SC. Noto kept as cross-platform fallback. */
-  --serif: 'et-book', Palatino, 'Palatino Linotype', 'Palatino LT STD',
-           'Book Antiqua', Georgia, 'Songti SC', STSong, 'Noto Serif SC', serif;
+  --serif: 'et-book', 'et-book-fallback', 'Songti SC', STSong, 'Noto Serif SC', serif;
   --sans: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
   --cn-serif: 'Songti SC', STSong, 'Noto Serif SC', serif;
@@ -158,7 +195,7 @@ em, i { font-style: italic; }
 a { color: var(--link); text-decoration: none; transition: opacity 0.15s; }
 a:hover { opacity: 0.7; }
 strong, b { font-weight: 700; color: var(--text-strong); }
-img, video { max-width: 100%; border-radius: 5px; }
+img, video { max-width: 100%; height: auto; border-radius: 5px; }
 
 /* ===== Prose links: black text + underline (matches reference computed text-decoration:underline) ===== */
 .blog-post section a:not(.sidenote-link):not(.sidenote-num):not(.cite),
@@ -404,11 +441,16 @@ html.dark .blog-post pre.astro-code span { color: var(--shiki-dark) !important; 
 /* ===== Visitor map (homepage bottom) ===== */
 .visitor-map { margin: 40px 0 8px; }
 .visitor-map h2 { margin-bottom: 0.6em; }
-.visitor-map-frame { display: flex; justify-content: center; }
+.visitor-map-frame {
+  display: flex;
+  justify-content: center;
+  container-type: inline-size;
+}
 .visitor-map-slot {
   width: 100%;
   max-width: 100%;
-  min-height: 160px;
+  /* Map is width/2.04 plus the two caption lines, reserved before the widget arrives. */
+  min-height: calc(100cqw / 2.04 + 40px);
 }
 .visitor-map-slot #mapmyvisitors-widget {
   max-width: 100%;
@@ -565,6 +607,7 @@ html.dark .toc-sidebar { color: #666; }
   }
   .header-content { flex-direction: column; text-align: center; }
   .publication { flex-direction: column; }
+  .publication.highlighted { margin-left: -1rem; margin-right: -1rem; }
   .pub-media { width: 100%; }
   .header-avatar { margin: 0 auto; }
   .blog-post h1 { font-size: calc(2rem * var(--g) * var(--fs-blog-h1)); }
