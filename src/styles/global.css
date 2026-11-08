@@ -241,7 +241,8 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .blog-list .post-desc { font-size: calc(1.15rem * var(--g) * var(--fs-hp-bloglist)); line-height: 1.7rem; color: var(--text-muted); margin-top: 4px; }
 
 /* ===== Homepage layout — typography aligned to reference (body 1.4rem/2.2rem et-book) ===== */
-.homepage { max-width: 55%; margin: 0 auto; padding: 0 0 3rem; }
+/* Column matches https://clf28.github.io/ .page: max-width 1023px, 28px side padding. */
+.homepage { max-width: 1023px; margin: 0 auto; padding: 0 28px 3rem; }
 .homepage h2 { font-size: calc(1.9rem * var(--g) * var(--fs-hp-h2)); margin: 2rem 0 1rem; }
 .homepage .intro { font-size: calc(1.4rem * var(--g) * var(--fs-hp-intro)); }
 .homepage .intro p { line-height: calc(2.2rem * var(--lh-hp-intro)); text-align: justify; text-justify: inter-ideograph; margin: 1.4rem 0; }
