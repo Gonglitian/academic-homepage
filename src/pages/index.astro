@@ -115,5 +115,87 @@ import VisitorMap from '../components/VisitorMap.astro';
   <footer class="footer noselect">
     <p style="font-size:0.8rem;">&copy; {new Date().getFullYear()} Litian Gong</p>
   </footer>
+  <script>
+  const hoverOK = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const SCALE = 2.25;
+  const MARGIN = 12;
+
+  type Zoom = { holder: HTMLDivElement; media: HTMLElement; visual: HTMLElement; closing: boolean };
+  let active: Zoom | null = null;
+
+  function clamp(n: number, min: number, max: number) {
+    return Math.min(max, Math.max(min, n));
+  }
+
+  function originFor(rect: DOMRect) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const bounds = (ox: number, oy: number) => {
+      const left = rect.left + ox * rect.width * (1 - SCALE);
+      const top = rect.top + oy * rect.height * (1 - SCALE);
+      return { left, top, right: left + rect.width * SCALE, bottom: top + rect.height * SCALE };
+    };
+    let ox = 0;
+    let oy = 0.5;
+    let box = bounds(ox, oy);
+    if (box.right > vw - MARGIN) ox = (vw - MARGIN - rect.left - rect.width * SCALE) / (rect.width * (1 - SCALE));
+    box = bounds(ox, oy);
+    if (box.left < MARGIN) ox = (MARGIN - rect.left) / (rect.width * (1 - SCALE));
+    ox = clamp(ox, 0, 1);
+    box = bounds(ox, oy);
+    if (box.bottom > vh - MARGIN) oy = (vh - MARGIN - rect.top - rect.height * SCALE) / (rect.height * (1 - SCALE));
+    box = bounds(ox, oy);
+    if (box.top < MARGIN) oy = (MARGIN - rect.top) / (rect.height * (1 - SCALE));
+    oy = clamp(oy, 0, 1);
+    return { ox, oy };
+  }
+
+  function restore(zoom: Zoom) {
+    if (zoom.visual.parentElement !== zoom.media) zoom.media.appendChild(zoom.visual);
+    zoom.holder.remove();
+    if (active === zoom) active = null;
+  }
+
+  function close(zoom: Zoom) {
+    if (zoom.closing) return;
+    zoom.closing = true;
+    zoom.holder.style.transform = 'scale(1)';
+    const done = () => restore(zoom);
+    zoom.holder.addEventListener('transitionend', done, { once: true });
+    window.setTimeout(done, 180);
+  }
+
+  function open(media: HTMLElement) {
+    if (!hoverOK.matches) return;
+    const visual = media.querySelector('img, video');
+    if (!(visual instanceof HTMLElement)) return;
+    if (active && !active.closing) close(active);
+    const rect = media.getBoundingClientRect();
+    const { ox, oy } = originFor(rect);
+    const holder = document.createElement('div');
+    holder.className = 'media-zoom-layer';
+    holder.style.left = `${rect.left}px`;
+    holder.style.top = `${rect.top}px`;
+    holder.style.width = `${rect.width}px`;
+    holder.style.height = `${rect.height}px`;
+    holder.style.transformOrigin = `${ox * 100}% ${oy * 100}%`;
+    holder.appendChild(visual);
+    document.body.appendChild(holder);
+    const zoom: Zoom = { holder, media, visual, closing: false };
+    active = zoom;
+    requestAnimationFrame(() => {
+      if (active === zoom) holder.style.transform = `scale(${SCALE})`;
+    });
+    holder.addEventListener('mouseleave', () => close(zoom));
+  }
+
+  document.querySelectorAll<HTMLElement>('.pub-media').forEach((media) => {
+    media.addEventListener('mouseenter', () => open(media));
+  });
+
+  const dismiss = () => { if (active) restore(active); };
+  window.addEventListener('wheel', dismiss, { passive: true });
+  window.addEventListener('touchmove', dismiss, { passive: true });
+  </script>
   </div>
 </BaseLayout>

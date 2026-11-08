@@ -242,15 +242,7 @@ const publicationJsonLd = JSON.stringify({
 <section>
   <script type="application/ld+json" set:html={publicationJsonLd} />
   <h2 class="noselect">Publications</h2>
-  <p class="filter-bar">
-    Filter by:
-    <button class="filter-btn active" data-cat="all">All Papers</button>
-    <button class="filter-btn" data-cat="selected">Selected Papers</button>
-    <button class="filter-btn" data-cat="vla">Robot Learning</button>
-    <button class="filter-btn" data-cat="vlm">Vision-Language</button>
-    <button class="filter-btn" data-cat="other">Other Topics</button>
-  </p>
-  <p style="color:var(--text-muted);font-size:0.9rem;margin:-8px 0 12px;">* Equal contribution.</p>
+  <p style="color:var(--text-muted);font-size:0.9rem;margin:0 0 12px;">* Equal contribution.</p>
 
   <div id="publications-container">
     {pubs.map((pub) => (
@@ -300,21 +292,3 @@ const publicationJsonLd = JSON.stringify({
     ))}
   </div>
 </section>
-
-<script>
-  const buttons = document.querySelectorAll('.filter-btn');
-  const pubs = document.querySelectorAll<HTMLElement>('#publications-container .publication');
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const cat = (btn as HTMLElement).dataset.cat!;
-
-      pubs.forEach(pub => {
-        const cats = pub.dataset.categories?.split(',') || [];
-        pub.style.display = (cat === 'all' || cats.includes(cat)) ? '' : 'none';
-      });
-    });
-  });
-</script>
