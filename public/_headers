@@ -1,3 +1,29 @@
+# Hashed filenames change when the file changes, so these can stay cached.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Keep a four-hour browser cache for fonts and root icons/scripts.
+/fonts/*
+  Cache-Control: public, max-age=14400
+
+/*.js
+  Cache-Control: public, max-age=14400
+
+/*.png
+  Cache-Control: public, max-age=14400
+
+/*.svg
+  Cache-Control: public, max-age=14400
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+
+/sitemap-0.xml
+  Cache-Control: public, max-age=3600
+
 # Shorter than Cloudflare's 4-hour default so a same-name image replace is not stuck all afternoon.
 /images/*
   Cache-Control: public, max-age=3600
