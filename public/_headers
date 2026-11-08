@@ -1,3 +1,7 @@
 # Shorter than Cloudflare's 4-hour default so a same-name image replace is not stuck all afternoon.
 /images/*
   Cache-Control: public, max-age=3600
+
+# CV replacements should show up within a few minutes.
+/cv/*
+  Cache-Control: public, max-age=300, must-revalidate

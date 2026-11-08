@@ -13,6 +13,7 @@ const links = [
   { label: "GitHub", href: "https://github.com/gonglitian" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/Gonglitian/" },
   { label: "Blog", href: "/blog" },
+  { label: "CV", href: "/cv/Litian_Gong_CV.pdf", external: true },
 ];
 ---
 
@@ -29,7 +30,11 @@ const links = [
         {links.map((link, i) => (
           <>
             {i > 0 && <span class="sep">/</span>}
-            <a href={link.href} class="btn">{link.label}</a>
+            <a
+              href={link.href}
+              class="btn"
+              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >{link.label}</a>
           </>
         ))}
         <span class="sep">/</span>
