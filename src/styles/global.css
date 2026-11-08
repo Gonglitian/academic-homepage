@@ -261,6 +261,7 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .pub-text .paper-venue { font-size: calc(1.05rem * var(--g) * var(--fs-hp-pub-venue)); color: var(--text-muted); margin: 3px 0; font-style: italic; }
 .pub-text .paper-links { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .pub-text .bold { font-weight: 700; }
+.project-desc { font-size: calc(1.1rem * var(--g) * var(--fs-hp-pub-authors)); line-height: 1.5; margin: 6px 0 0; }
 .publication.highlighted { background: var(--highlight-bg); border-radius: 8px; padding: 16px; margin: 8px -16px; border-bottom: none; box-shadow: 0 2px 8px var(--highlight-shadow); }
 
 /* Filter buttons */
