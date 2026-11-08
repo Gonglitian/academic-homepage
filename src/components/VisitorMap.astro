@@ -1,53 +1,46 @@
 ---
-const widgetId = "maYGjgki4VXNEU7R1kt2DutVY5p0wHza_8Dj3yXMBMA";
-const src = `https://mapmyvisitors.com/globe.js?d=${widgetId}`;
+const src = "https://mapmyvisitors.com/map.js?d=bLOU-RuFfuWYkbT5lp6u0WPtxscgzA9V2SDkbHrtINo&cl=ffffff&w=a";
 ---
 
 <section class="visitor-map noselect" aria-label="Visitor map">
   <h2>Visitors</h2>
   <div class="visitor-map-frame">
-    <div id="visitor-globe-slot" class="visitor-globe-slot">
-      <p class="visitor-map-fallback" hidden>Visitor globe unavailable.</p>
+    <div id="visitor-map-slot" class="visitor-map-slot">
+      <p class="visitor-map-fallback" hidden>Visitor map unavailable.</p>
     </div>
   </div>
 </section>
 
 <script define:vars={{ src }}>
   const section = document.querySelector('.visitor-map');
-  const slot = document.getElementById('visitor-globe-slot');
+  const slot = document.getElementById('visitor-map-slot');
   const fallback = slot?.querySelector('.visitor-map-fallback');
   if (section && slot) {
     let started = false;
     const showFallback = () => {
       if (fallback instanceof HTMLElement) fallback.hidden = false;
     };
-    const loaded = () => {
-      // globe.js binds its reveal to window "load", which has already fired
-      // by the time this section is near the viewport. Nudge that isolated jQuery.
-      let tries = 0;
-      const kick = () => {
-        const outer = slot.querySelector('.mmvst_outer');
-        const jq = window.globe_jq;
-        if (outer && jq) {
-          try { jq(window).trigger('load'); } catch (e) {}
-          window.dispatchEvent(new Event('scroll'));
-          return;
-        }
-        tries += 1;
-        if (tries < 40) window.setTimeout(kick, 150);
-        else showFallback();
-      };
-      kick();
-    };
     const load = () => {
       if (started) return;
       started = true;
       const script = document.createElement('script');
-      script.id = 'mmvst_globe';
+      script.type = 'text/javascript';
+      script.id = 'mapmyvisitors';
       script.src = src;
       script.async = true;
       script.onerror = showFallback;
-      script.onload = loaded;
+      script.onload = () => {
+        let tries = 0;
+        const check = () => {
+          const widget = slot.querySelector('#mapmyvisitors-widget');
+          const painted = widget?.querySelector('svg path, svg, canvas');
+          if (painted) return;
+          tries += 1;
+          if (tries < 40) window.setTimeout(check, 200);
+          else showFallback();
+        };
+        check();
+      };
       slot.appendChild(script);
     };
     const io = new IntersectionObserver((entries) => {
