@@ -1,56 +1,46 @@
-/* ===== et-book self-hosted (canonical tufte-css 1.8.0, local flat layout) ===== */
-/* Local faces scaled to et-book's advance width and win ascent/descent (upem 2048)
+/* Newsreader, self-hosted. Fallbacks are scaled to its advance and win metrics
    so a late swap does not reflow. Times and Liberation Serif share those metrics. */
 @font-face {
-  font-family: 'et-book-fallback';
+  font-family: 'Newsreader-fallback';
   src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif'), local('LiberationSerif');
   font-weight: 400; font-style: normal;
-  size-adjust: 99.72%;
-  ascent-override: 89.57%;
-  descent-override: 30.94%;
+  size-adjust: 102.03%;
+  ascent-override: 113.99%;
+  descent-override: 26.02%;
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'et-book-fallback';
+  font-family: 'Newsreader-fallback';
   src: local('Times New Roman Bold'), local('TimesNewRomanPS-BoldMT'), local('Liberation Serif Bold'), local('LiberationSerif-Bold');
-  font-weight: 700; font-style: normal;
-  size-adjust: 95%;
-  ascent-override: 98.73%;
-  descent-override: 32.48%;
+  font-weight: 600 700; font-style: normal;
+  size-adjust: 101.06%;
+  ascent-override: 115.08%;
+  descent-override: 26.27%;
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'et-book-fallback';
+  font-family: 'Newsreader-fallback';
   src: local('Times New Roman Italic'), local('TimesNewRomanPS-ItalicMT'), local('Liberation Serif Italic'), local('LiberationSerif-Italic');
   font-weight: 400; font-style: italic;
-  size-adjust: 99.72%;
-  ascent-override: 89.57%;
-  descent-override: 30.94%;
+  size-adjust: 102.03%;
+  ascent-override: 113.99%;
+  descent-override: 26.02%;
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-roman-line-figures.woff2') format('woff2'),
-       url('/fonts/et-book/et-book-roman-line-figures.woff') format('woff');
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader/newsreader-400.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-display-italic-old-style-figures.woff2') format('woff2'),
-       url('/fonts/et-book/et-book-display-italic-old-style-figures.woff') format('woff');
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader/newsreader-600.woff2') format('woff2');
+  font-weight: 600 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader/newsreader-400-italic.woff2') format('woff2');
   font-weight: 400; font-style: italic; font-display: optional;
-}
-@font-face {
-  font-family: 'et-book';
-  src: url('/fonts/et-book/et-book-bold-line-figures.woff2') format('woff2'),
-       url('/fonts/et-book/et-book-bold-line-figures.woff') format('woff');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'et-book-roman-old-style';
-  src: url('/fonts/et-book/et-book-roman-old-style-figures.woff2') format('woff2'),
-       url('/fonts/et-book/et-book-roman-old-style-figures.woff') format('woff');
-  font-weight: 400; font-style: normal; font-display: optional;
 }
 /* Only the few Chinese characters on the homepage. optional: never swap in late. */
 @font-face {
@@ -67,10 +57,10 @@
   /* Font families (switchable by the type-tune panel).
      CJK falls to system serif (Songti) first — like the reference, which uses no CJK webfont
      and renders slightly heavier/darker than Noto Serif SC. Noto kept as cross-platform fallback. */
-  --serif: 'et-book', 'et-book-fallback', 'Songti SC', STSong, 'Noto Serif SC', serif;
+  --serif: 'Newsreader', 'Newsreader-fallback', 'Noto Serif SC', Georgia, serif;
   --sans: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-  --cn-serif: 'Songti SC', STSong, 'Noto Serif SC', serif;
+  --cn-serif: 'Noto Serif SC', 'Songti SC', STSong, serif;
 
   /* ---- Type-tune multipliers (default 1; overridden live by typetune.js) ---- */
   --g: 1; /* global size multiplier */
@@ -134,14 +124,16 @@
   --radius-sm: 0.2rem;
 }
 
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
 html.dark {
-  --bg: #151515;
-  --bg-soft: #1d1d1d;
-  --text: #dddddd;
-  --text-strong: #eeeeee;
-  --text-muted: #999999;
-  --border: #333333;
-  --link: #7eb8e0;
+  --bg: #141414;
+  --bg-soft: #1c1c1a;
+  --text: #ebe8e1;
+  --text-strong: #f3f0e8;
+  --text-muted: #8f8b83;
+  --border: #2a2926;
+  --link: #8db1f0;
   --highlight-bg: #252525;
   --highlight-shadow: rgba(255, 255, 255, 0.03);
   --badge-bg: #c0392b;
@@ -200,7 +192,8 @@ img, video { max-width: 100%; height: auto; border-radius: 5px; }
 /* ===== Prose links: black text + underline (matches reference computed text-decoration:underline) ===== */
 .blog-post section a:not(.sidenote-link):not(.sidenote-num):not(.cite),
 .homepage .intro a,
-.news-list a,
+  .news-list a,
+.news a,
 .paper-authors a {
   color: inherit;
   text-decoration: underline;
@@ -210,6 +203,7 @@ img, video { max-width: 100%; height: auto; border-radius: 5px; }
 .blog-post section a:not(.sidenote-link):not(.sidenote-num):not(.cite):hover,
 .homepage .intro a:hover,
 .news-list a:hover,
+.news a:hover,
 .paper-authors a:hover { opacity: 1; text-decoration-thickness: 2px; }
 
 /* ===== Code (base) ===== */
@@ -243,8 +237,8 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .header-links .sep { color: var(--text-muted); margin: 0 2px; }
 
 /* Theme toggle */
-.theme-toggle { position: absolute; top: 20px; right: 24px; background: none; border: 1px solid var(--border); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: background 0.15s; z-index: 20; }
-.theme-toggle:hover { background: var(--btn-bg); }
+.theme-toggle { background: none; border: 0; padding: 0 2px; cursor: pointer; font-family: var(--serif); font-size: inherit; color: var(--link); }
+.theme-toggle:hover { opacity: 0.7; }
 
 /* ===== Publication List ===== */
 .publication { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); transition: background 0.2s; }
@@ -254,7 +248,7 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
   border-radius: 6px; overflow: hidden; background: var(--bg-soft);
   border: 1px solid var(--border);
 }
-.pub-media img, .pub-media video { width: 100%; height: 100%; object-fit: contain; display: block; background: var(--bg-soft); }
+.pub-media img, .pub-media video { width: 100%; height: 100%; object-fit: cover; display: block; background: var(--bg-soft); }
 .pub-text { flex: 1; min-width: 0; }
 .pub-text .paper-title { font-weight: 600; font-size: calc(1.2rem * var(--g) * var(--fs-hp-pub-title)); line-height: 1.5; color: var(--text-strong); }
 .pub-text .paper-authors { font-size: calc(1.1rem * var(--g) * var(--fs-hp-pub-authors)); line-height: 1.5; margin: 3px 0; }
@@ -262,6 +256,26 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .pub-text .paper-links { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .pub-text .bold { font-weight: 700; }
 .project-desc { font-size: calc(1.1rem * var(--g) * var(--fs-hp-pub-authors)); line-height: 1.5; margin: 6px 0 0; }
+.star-count { color: var(--text-muted); font-variant-numeric: tabular-nums; margin-left: 4px; }
+[lang="zh"] { font-family: var(--cn-serif); }
+
+.hl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 16px; margin-top: 4px; }
+.hl-card { display: block; color: inherit; text-decoration: none; }
+.hl-card:hover { opacity: 1; }
+.hl-card:hover .hl-title { color: var(--link); }
+.hl-media { aspect-ratio: 16 / 9; border-radius: 6px; overflow: hidden; background: var(--bg-soft); }
+.hl-media video { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 0; }
+.hl-title { display: block; margin-top: 8px; font-weight: 600; font-size: 1.05rem; line-height: 1.35; }
+
+.news { list-style: none; margin: 0; padding: 0; }
+.news li { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 16px; padding: 7px 0; border-top: 1px solid var(--border); align-items: baseline; }
+.news li:first-child { border-top: 0; }
+.news time { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.news-more { background: none; border: 0; padding: 0; margin-top: 10px; cursor: pointer; font-family: var(--serif); font-size: 1rem; color: var(--text-muted); text-decoration: underline; text-underline-offset: 0.25em; }
+.news-more:hover { color: var(--text); }
+
+html.dark .katex, html.dark .katex-display { color: var(--text); }
+html.dark .visitor-map-slot { background: var(--bg-soft); }
 
 /* Hover zoom: a fixed layer on body, so overflow:hidden on the thumbnail cannot clip it. */
 @media (hover: hover) and (pointer: fine) {
@@ -282,7 +296,7 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
     width: 100%;
     height: 100%;
     max-width: none;
-    object-fit: contain;
+    object-fit: cover;
     display: block;
     background: var(--bg-soft);
     border-radius: 0;
@@ -305,6 +319,7 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .homepage .intro { font-size: calc(1.4rem * var(--g) * var(--fs-hp-intro)); }
 .homepage .intro p { line-height: calc(2.2rem * var(--lh-hp-intro)); text-align: justify; text-justify: inter-ideograph; margin: 1.4rem 0; }
 .homepage .news-list li { font-size: calc(1.2rem * var(--g) * var(--fs-hp-news)); line-height: 1.9rem; margin-bottom: 0.3rem; }
+.homepage .news li { font-size: calc(1.2rem * var(--g) * var(--fs-hp-news)); line-height: 1.45; }
 
 /* =====================================================================
    BLOG — Tufte three-column layout
@@ -606,6 +621,13 @@ html.dark .toc-sidebar { color: #666; }
 #typetune-panel .tt-hint { color: var(--text-muted); font-size: 10px; margin-top: 8px; }
 
 /* ===== Responsive ===== */
+@media (max-width: 960px) {
+  .hl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .hl-grid { grid-template-columns: minmax(0, 1fr); }
+  .news li { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
+}
 @media (max-width: 760px) {
   .homepage { width: 100%; max-width: 100%; padding: 0 1rem 2rem; }
   .blog-wrapper { width: 100%; max-width: 100%; padding-left: 0; padding-right: 0; }

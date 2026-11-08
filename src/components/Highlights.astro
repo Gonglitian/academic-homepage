@@ -1,0 +1,75 @@
+---
+const items = [
+  {
+    title: "Real2Sim and Real-World VLA Fine-tuning Pipeline",
+    href: "#project-real2sim",
+    src: "/images/proj-real2sim-v2.mp4",
+    poster: "/images/proj-real2sim-v2.jpg",
+    width: 640,
+    height: 358,
+  },
+  {
+    title: "Memory Policy",
+    href: "#project-memory-policy",
+    src: "/images/proj-memory-policy-v2.mp4",
+    poster: "/images/proj-memory-policy-v2.jpg",
+    width: 640,
+    height: 214,
+  },
+  {
+    title: "WMLab: World Models for Control",
+    href: "#project-wmlab",
+    src: "/images/proj-wmlab-mpc-v2.mp4",
+    poster: "/images/proj-wmlab-mpc-v2.jpg",
+    width: 640,
+    height: 160,
+  },
+  {
+    title: "Human-Following Robots in Simulation and the Real World",
+    href: "#project-human-following",
+    src: "/images/proj-human-following-v2.mp4",
+    poster: "/images/proj-human-following-v2.jpg",
+    width: 640,
+    height: 358,
+  },
+  {
+    title: "AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations",
+    href: "https://autofocus-il.github.io/",
+    src: "/images/autofocus-il-v3.mp4",
+    poster: "/images/autofocus-il-v3.jpg",
+    width: 640,
+    height: 204,
+  },
+  {
+    title: "Closed-Loop Customizable Human Following via Distilling Distance-Ordered Constrained Policies",
+    href: "#pub-human-following",
+    src: "/images/hf-real-indoor-v2.mp4",
+    poster: "/images/hf-real-indoor-v2.jpg",
+    width: 640,
+    height: 252,
+  },
+];
+---
+
+<section class="highlights" aria-label="Highlights">
+  <div class="hl-grid">
+    {items.map((item) => (
+      <a class="hl-card" href={item.href}>
+        <div class="hl-media">
+          <video
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster={item.poster}
+            data-src={item.src}
+            width={item.width}
+            height={item.height}
+            aria-label={item.title}
+          ></video>
+        </div>
+        <span class="hl-title">{item.title}</span>
+      </a>
+    ))}
+  </div>
+</section>

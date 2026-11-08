@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
+
 const name = "Litian Gong";
 const nameCn = "龚利天";
 const email = "lgong024@ucr.edu";
@@ -30,6 +32,8 @@ const links = [
             <a href={link.href} class="btn">{link.label}</a>
           </>
         ))}
+        <span class="sep">/</span>
+        <ThemeToggle />
       </div>
     </div>
   </div>

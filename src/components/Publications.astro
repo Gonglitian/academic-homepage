@@ -6,7 +6,10 @@ interface Pub {
   year: number;
   categories: string[];
   links: { label: string; href: string; cls?: string }[];
-  media?: { type: 'video'; src: string } | { type: 'image'; src: string; alt: string; width: number; height: number };
+  media?:
+    | { type: 'video'; src: string; poster: string; alt: string; width: number; height: number }
+    | { type: 'image'; src: string; alt: string; width: number; height: number };
+  id?: string;
   /** Shown instead of "venue, year" for manuscripts that are not yet published. */
   status?: string;
   highlight?: boolean;
@@ -50,7 +53,8 @@ const pubs: Pub[] = [
     status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    media: { type: "image", src: "/images/hf_real_indoor_clip.gif", alt: "Indoor human-following demo, two trajectories side by side", width: 520, height: 205 },
+    id: "pub-human-following",
+    media: { type: "video", src: "/images/hf-real-indoor-v2.mp4", poster: "/images/hf-real-indoor-v2.jpg", alt: "Indoor human-following demo, two trajectories side by side", width: 640, height: 252 },
     links: [],
   },
   {
@@ -83,7 +87,7 @@ const pubs: Pub[] = [
     year: 2027,
     status: "In submission",
     categories: ["vla"],
-    media: { type: "image", src: "/images/axis-bench.gif", alt: "AXIS-Bench robot manipulation preview", width: 640, height: 360 },
+    media: { type: "video", src: "/images/axis-bench-v2.mp4", poster: "/images/axis-bench-v2.jpg", alt: "AXIS-Bench robot manipulation preview", width: 640, height: 360 },
     links: [
       { label: "project page", href: "https://axis-bench.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.18869", cls: "btn-red" },
@@ -109,7 +113,7 @@ const pubs: Pub[] = [
     status: "In submission",
     categories: ["vla"],
     equalContribution: true,
-    media: { type: "image", src: "/images/libero-perm.gif", alt: "LIBERO-PeRM personalized manipulation tasks", width: 720, height: 360 },
+    media: { type: "video", src: "/images/libero-perm-v2.mp4", poster: "/images/libero-perm-v2.jpg", alt: "LIBERO-PeRM personalized manipulation tasks", width: 640, height: 320 },
     links: [
       { label: "project page", href: "https://libero-perm.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.22372", cls: "btn-red" },
@@ -129,7 +133,7 @@ const pubs: Pub[] = [
     venue: "Conference on Robot Learning (<b>CoRL</b>)",
     year: 2026,
     categories: ["selected", "vla"],
-    media: { type: "image", src: "/images/pacer.gif", alt: "PACER robotic disassembly preview", width: 600, height: 338 },
+    media: { type: "video", src: "/images/pacer-v2.mp4", poster: "/images/pacer-v2.jpg", alt: "PACER robotic disassembly preview", width: 640, height: 360 },
     links: [
       { label: "project page", href: "https://pacer-corl.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.19248", cls: "btn-red" },
@@ -150,7 +154,8 @@ const pubs: Pub[] = [
     year: 2026,
     categories: ["selected", "vla", "il"],
     highlight: true,
-    media: { type: "image", src: "/images/autofocus-il-v2.gif", alt: "AutoFocus-IL driving and manipulation saliency", width: 676, height: 216 },
+    id: "pub-autofocus",
+    media: { type: "video", src: "/images/autofocus-il-v3.mp4", poster: "/images/autofocus-il-v3.jpg", alt: "AutoFocus-IL driving and manipulation saliency", width: 640, height: 204 },
     links: [
       { label: "project page", href: "https://autofocus-il.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2511.18617", cls: "btn-red" },
@@ -194,6 +199,41 @@ const pubs: Pub[] = [
     ],
   },
 ];
+
+const codeRepos: Record<string, string> = {
+  "https://github.com/axis-bench/axis-bench": "axis-bench/axis-bench",
+  "https://github.com/ChangChrisLiu/PACER": "ChangChrisLiu/PACER",
+  "https://github.com/autofocus-il/autofocus-il": "autofocus-il/autofocus-il",
+  "https://github.com/ZhaoyangLi-1/ORIC": "ZhaoyangLi-1/ORIC",
+};
+
+async function loadStars(repo: string): Promise<number | null> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}`, {
+      headers: {
+        "User-Agent": "litiangong-homepage",
+        Accept: "application/vnd.github+json",
+      },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return typeof data.stargazers_count === "number" ? data.stargazers_count : null;
+  } catch {
+    return null;
+  }
+}
+
+const starCount = new Map(
+  await Promise.all(
+    Object.entries(codeRepos).map(async ([href, repo]) => [href, await loadStars(repo)] as const),
+  ),
+);
+
+function formatStars(n: number): string {
+  if (n < 1000) return String(n);
+  const digits = n >= 10000 ? 0 : 1;
+  return `${(n / 1000).toFixed(digits).replace(/\.0$/, "")}k`;
+}
 
 const siteOrigin = "https://litiangong.com";
 
@@ -248,14 +288,23 @@ const publicationJsonLd = JSON.stringify({
     {pubs.map((pub) => (
       <div
         class={`publication row clearfix${pub.highlight ? ' highlighted' : ''}`}
+        id={pub.id}
         data-categories={pub.categories.join(',')}
       >
         {pub.media && (
           <div class="pub-media">
             {pub.media.type === 'video' ? (
-              <video autoplay muted loop playsinline>
-                <source src={pub.media.src} type="video/mp4" />
-              </video>
+              <video
+                muted
+                loop
+                playsinline
+                preload="none"
+                poster={pub.media.poster}
+                data-src={pub.media.src}
+                width={pub.media.width}
+                height={pub.media.height}
+                aria-label={pub.media.alt}
+              ></video>
             ) : (
               <img src={pub.media.src} alt={pub.media.alt} width={pub.media.width} height={pub.media.height} loading="lazy" decoding="async" />
             )}
@@ -281,9 +330,15 @@ const publicationJsonLd = JSON.stringify({
             <>
               <br />
               <span class="paper-links">
-                {pub.links.map((link) => (
-                  <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
-                ))}
+                {pub.links.map((link) => {
+                  const stars = link.label === "code" ? starCount.get(link.href) : null;
+                  return (
+                    <>
+                      <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
+                      {typeof stars === "number" && <span class="star-count">★ {formatStars(stars)}</span>}
+                    </>
+                  );
+                })}
               </span>
             </>
           )}

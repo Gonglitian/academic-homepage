@@ -3,34 +3,38 @@ const projects = [
   {
     title: "Real2Sim and Real-World VLA Fine-tuning Pipeline",
     description: "A sim-to-real pipeline for vision-language-action (VLA) models. We align a simulated DROID-style Franka setup with the real robot (controller, cameras, lab scene), render RL expert trajectories in simulation for distillation into π0.5-DROID, and LoRA-fine-tune π0.5 on real Franka FR3 data with out-of-distribution real-robot evaluation.",
-    poster: "/images/proj-real2sim-v1.png",
-    gif: "/images/proj-real2sim-v1.gif",
-    width: 600,
-    height: 336,
+    id: "project-real2sim",
+    poster: "/images/proj-real2sim-v2.jpg",
+    src: "/images/proj-real2sim-v2.mp4",
+    width: 640,
+    height: 358,
   },
   {
     title: "Memory Policy",
     description: "A controlled study of memory mechanisms for robot policies: published memory designs are re-implemented as plug-in modules on one shared Diffusion Policy backbone and evaluated under the same benchmark and protocol, including ablations where the policy's memory is masked, shuffled, or zeroed.",
-    poster: "/images/proj-action-memory-v1.png",
-    gif: "/images/proj-action-memory-v1.gif",
-    width: 639,
-    height: 213,
+    id: "project-memory-policy",
+    poster: "/images/proj-memory-policy-v2.jpg",
+    src: "/images/proj-memory-policy-v2.mp4",
+    width: 640,
+    height: 214,
   },
   {
     title: "WMLab: World Models for Control",
     description: "A modular world-model framework that breaks down design choices from driving, manipulation, and navigation world models into swappable components for controlled comparison. A learned latent world model is used as the internal simulator for model-predictive control in CarRacing (left: real environment, right: imagined future frames).",
-    poster: "/images/proj-wmlab-mpc-v1.png",
-    gif: "/images/proj-wmlab-mpc-v1.gif",
+    id: "project-wmlab",
+    poster: "/images/proj-wmlab-mpc-v2.jpg",
+    src: "/images/proj-wmlab-mpc-v2.mp4",
     width: 640,
     height: 160,
   },
   {
     title: "Human-Following Robots in Simulation and the Real World",
     description: "Learning-based person following for mobile robots, from a Unitree Go2-W wheeled quadruped to a Rosmaster X3 omnidirectional car. We build Isaac Sim / Isaac Lab environments with simulated humans and RTX lidar, replay real-robot runs as closed-loop digital twins running the real perception and decision stack, and train terrain-aware following policies on 3D street scenes.",
-    poster: "/images/proj-human-following-v1.png",
-    gif: "/images/proj-human-following-v1.gif",
-    width: 600,
-    height: 336,
+    id: "project-human-following",
+    poster: "/images/proj-human-following-v2.jpg",
+    src: "/images/proj-human-following-v2.mp4",
+    width: 640,
+    height: 358,
   },
 ];
 ---
@@ -39,17 +43,19 @@ const projects = [
   <h2 class="noselect">Projects</h2>
   <div id="projects-container">
     {projects.map((project) => (
-      <div class="publication">
+      <div class="publication" id={project.id}>
         <div class="pub-media">
-          <img
-            src={project.poster}
-            data-gif={project.gif}
-            alt={project.title}
+          <video
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster={project.poster}
+            data-src={project.src}
             width={project.width}
             height={project.height}
-            loading="lazy"
-            decoding="async"
-          />
+            aria-label={project.title}
+          ></video>
         </div>
         <div class="pub-text">
           <span class="paper-title">{project.title}</span>
@@ -59,32 +65,3 @@ const projects = [
     ))}
   </div>
 </section>
-
-<script>
-  const frames = document.querySelectorAll<HTMLImageElement>('#projects-container img[data-gif]');
-
-  function playGif(img: HTMLImageElement) {
-    const gif = img.dataset.gif;
-    if (!gif || img.dataset.playing === '1') return;
-    img.dataset.playing = '1';
-    const next = new Image();
-    next.decoding = 'async';
-    next.onload = () => {
-      img.src = gif;
-    };
-    next.src = gif;
-  }
-
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        playGif(entry.target as HTMLImageElement);
-        observer.unobserve(entry.target);
-      });
-    }, { rootMargin: '200px' });
-    frames.forEach((img) => observer.observe(img));
-  } else {
-    frames.forEach(playGif);
-  }
-</script>

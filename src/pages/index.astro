@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import Highlights from '../components/Highlights.astro';
 import Publications from '../components/Publications.astro';
 import Projects from '../components/Projects.astro';
 import VisitorMap from '../components/VisitorMap.astro';
@@ -41,41 +42,46 @@ import VisitorMap from '../components/VisitorMap.astro';
     </p>
   </section>
 
+  <Highlights />
+
   <!-- News -->
   <section style="margin-bottom:32px;">
     <h2 class="noselect">News</h2>
-    <ul class="news-list" style="list-style:none;padding:0;">
+    <ul class="news" id="news-list">
       <li>
-        <b>(2026 Sep)</b> One paper accepted to <b>CoRL 2026</b>:
-        <a href="https://pacer-corl.github.io/">PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly</a>.
+        <time>2026 Sep</time>
+        <span>One paper accepted to <b>CoRL 2026</b>: <a href="https://pacer-corl.github.io/">PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly</a>.</span>
       </li>
       <li>
-        <b>(2026 Sep)</b> Started the Ph.D. program in Electrical Engineering at UC Riverside, advised by
-        <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.
+        <time>2026 Sep</time>
+        <span>Started the Ph.D. program in Electrical Engineering at UC Riverside, advised by <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.</span>
       </li>
       <li>
-        <b>(2026 Feb)</b> One paper accepted to <b>CVPR 2026</b>:
-        <a href="https://arxiv.org/abs/2509.15695">ORIC: Benchmarking Object Recognition in Incongruous Context for Large Vision-Language Models</a>.
+        <time>2026 Feb</time>
+        <span>One paper accepted to <b>CVPR 2026</b>: <a href="https://arxiv.org/abs/2509.15695">ORIC: Benchmarking Object Recognition in Incongruous Context for Large Vision-Language Models</a>.</span>
       </li>
-      <li>
-        <b>(2026 Jan)</b> One paper accepted to <b>ICRA 2026</b>:
-        <a href="https://arxiv.org/abs/2511.18617">AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations</a>.
+      <li class="news-extra" hidden>
+        <time>2026 Jan</time>
+        <span>One paper accepted to <b>ICRA 2026</b>: <a href="https://arxiv.org/abs/2511.18617">AutoFocus-IL: VLM-based Saliency Maps for Data-Efficient Visual Imitation Learning without Extra Human Annotations</a>.</span>
       </li>
-      <li>
-        <b>(2025 Jun)</b> Joined the <a href="https://liralab.usc.edu/">LIRA Lab</a> at USC,
-        working with <a href="https://ebiyik.github.io/">Prof. Erdem B&#305;y&#305;k</a>.
+      <li class="news-extra" hidden>
+        <time>2025 Jun</time>
+        <span>Joined the <a href="https://liralab.usc.edu/">LIRA Lab</a> at USC, working with <a href="https://ebiyik.github.io/">Prof. Erdem B&#305;y&#305;k</a>.</span>
       </li>
-      <li>
-        <b>(2024 Nov)</b> Started research at <a href="https://tasl.ucr.edu/">TASL</a>, UC Riverside,
-        working with <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.
+      <li class="news-extra" hidden>
+        <time>2024 Nov</time>
+        <span>Started research at <a href="https://tasl.ucr.edu/">TASL</a>, UC Riverside, working with <a href="https://jiachenli94.github.io/">Prof. Jiachen Li</a>.</span>
       </li>
-      <li>
-        <b>(2024 Sep)</b> Started Master's program in Electrical Engineering at UC Riverside.
+      <li class="news-extra" hidden>
+        <time>2024 Sep</time>
+        <span>Started Master's program in Electrical Engineering at UC Riverside.</span>
       </li>
-      <li>
-        <b>(2024 Jun)</b> Graduated from HUST as <b>Outstanding Undergraduate Graduate</b>.
+      <li class="news-extra" hidden>
+        <time>2024 Jun</time>
+        <span>Graduated from HUST as <b>Outstanding Undergraduate Graduate</b>.</span>
       </li>
     </ul>
+    <button class="news-more" id="news-more" type="button" aria-expanded="false" data-label="Show all 8">Show all 8</button>
   </section>
 
   <!-- Education -->
@@ -189,9 +195,43 @@ import VisitorMap from '../components/VisitorMap.astro';
     holder.addEventListener('mouseleave', () => close(zoom));
   }
 
-  document.querySelectorAll<HTMLElement>('.pub-media').forEach((media) => {
+  document.querySelectorAll<HTMLElement>('.pub-media, .hl-media').forEach((media) => {
     media.addEventListener('mouseenter', () => open(media));
   });
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  const videos = document.querySelectorAll<HTMLVideoElement>('video[data-src]');
+  if (!reduceMotion && !saveData && 'IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) {
+          if (!video.getAttribute('src') && video.dataset.src) {
+            video.src = video.dataset.src;
+            video.load();
+          }
+          const pending = video.play();
+          if (pending && typeof pending.catch === 'function') pending.catch(() => {});
+        } else if (!video.paused) {
+          video.pause();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    videos.forEach((video) => videoObserver.observe(video));
+  }
+
+  const newsMore = document.getElementById('news-more');
+  if (newsMore) {
+    newsMore.addEventListener('click', () => {
+      const open = newsMore.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll<HTMLElement>('#news-list .news-extra').forEach((item) => {
+        item.hidden = open;
+      });
+      newsMore.setAttribute('aria-expanded', open ? 'false' : 'true');
+      newsMore.textContent = open ? (newsMore.dataset.label || 'Show all') : 'Show fewer';
+    });
+  }
 
   const dismiss = () => { if (active) restore(active); };
   window.addEventListener('wheel', dismiss, { passive: true });
