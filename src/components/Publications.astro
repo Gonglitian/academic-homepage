@@ -108,16 +108,43 @@ const pubs: Pub[] = [
       { name: "Junge Zhang", href: "https://tasl-lab.github.io/members/junge-zhang.html" },
       { name: "Jiachen Li", href: "https://jiachenli94.github.io/" },
     ]),
-    venue: "",
+    venue: "Conference on Neural Information Processing Systems (<b>NeurIPS</b>)",
     year: 2026,
-    status: "In submission",
-    categories: ["vla"],
+    categories: ["selected", "vla"],
     equalContribution: true,
     media: { type: "video", src: "/images/libero-perm-v2.mp4", poster: "/images/libero-perm-v2.jpg", alt: "LIBERO-PeRM personalized manipulation tasks", width: 640, height: 320 },
     links: [
       { label: "project page", href: "https://libero-perm.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.22372", cls: "btn-red" },
       { label: "code", href: "https://github.com/tasl-lab/LIBERO-PeRM" },
+    ],
+  },
+  {
+    title: "Agents' Last Exam",
+    authors: [
+      formatAuthors([
+        { name: "Yiyou Sun" },
+        { name: "Xinyang Han" },
+        { name: "Weichen Zhang" },
+        { name: "Yuanbo Pang" },
+        { name: "Tianyu Wang" },
+        { name: "Yuhan Cao" },
+        { name: "Yixiao Huang" },
+        { name: "Xiang Liu" },
+      ]),
+      "...",
+      formatAuthors([{ name: "Litian Gong" }]),
+      "... et al.",
+    ].join(", "),
+    venue: "Conference on Neural Information Processing Systems (<b>NeurIPS</b>)",
+    year: 2026,
+    categories: ["selected"],
+    id: "pub-agents-last-exam",
+    media: { type: "video", src: "/images/ale-intro-v1.mp4", poster: "/images/ale-intro-v1.jpg", alt: "Agents' Last Exam overview of professional workflow tasks", width: 640, height: 360 },
+    links: [
+      { label: "project page", href: "https://agents-last-exam.org/", cls: "btn-orange" },
+      { label: "arXiv", href: "https://arxiv.org/abs/2606.05405", cls: "btn-red" },
+      { label: "code", href: "https://github.com/rdi-berkeley/agents-last-exam" },
     ],
   },
   {
@@ -207,6 +234,7 @@ const codeRepos: Record<string, string> = {
   "https://github.com/autofocus-il/autofocus-il": "autofocus-il/autofocus-il",
   "https://github.com/ZhaoyangLi-1/ORIC": "ZhaoyangLi-1/ORIC",
   "https://github.com/tasl-lab/LIBERO-PeRM": "tasl-lab/LIBERO-PeRM",
+  "https://github.com/rdi-berkeley/agents-last-exam": "rdi-berkeley/agents-last-exam",
 };
 
 async function loadStars(repo: string): Promise<number | null> {
