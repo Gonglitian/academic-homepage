@@ -117,6 +117,7 @@ const pubs: Pub[] = [
     links: [
       { label: "project page", href: "https://libero-perm.github.io/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2610.22372", cls: "btn-red" },
+      { label: "OpenReview", href: "https://openreview.net/forum?id=oKf5hLCWWh" },
       { label: "code", href: "https://github.com/tasl-lab/LIBERO-PeRM" },
     ],
   },
@@ -145,7 +146,23 @@ const pubs: Pub[] = [
     links: [
       { label: "project page", href: "https://agents-last-exam.org/", cls: "btn-orange" },
       { label: "arXiv", href: "https://arxiv.org/abs/2606.05405", cls: "btn-red" },
+      { label: "OpenReview", href: "https://openreview.net/forum?id=L1pAwhCE4k" },
       { label: "code", href: "https://github.com/rdi-berkeley/agents-last-exam" },
+    ],
+  },
+  {
+    title: "Learning in Zero Gravity: Altered Physics as a Source of Spatially Diverse Robot Experience",
+    authors: formatAuthors([
+      { name: "Asif Amin" },
+      { name: "Litian Gong" },
+    ]),
+    venue: "<b>NeurIPS</b> Workshop on PhysWorldAI",
+    year: 2026,
+    categories: ["vla"],
+    id: "pub-zero-gravity",
+    media: { type: "image", src: "/images/zero-gravity-placeholder-v1.jpg", alt: "Title card for Learning in Zero Gravity", width: 1280, height: 720 },
+    links: [
+      { label: "OpenReview", href: "https://openreview.net/forum?id=KMVRTNtQU8" },
     ],
   },
   {
@@ -286,6 +303,7 @@ const publicationJsonLd = JSON.stringify({
     const arxiv = pub.links.find((link) => link.label === "arXiv")?.href;
     const doi = pub.links.find((link) => link.label === "DOI")?.href;
     const project = pub.links.find((link) => link.label === "project page")?.href;
+    const openreview = pub.links.find((link) => link.label === "OpenReview")?.href;
     const node: Record<string, unknown> = {
       "@type": "ScholarlyArticle",
       headline: pub.title,
@@ -301,9 +319,9 @@ const publicationJsonLd = JSON.stringify({
       const venue = plainText(pub.venue);
       if (venue) node.publisher = { "@type": "Organization", name: venue };
     }
-    const url = arxiv || doi || project;
+    const url = arxiv || doi || project || openreview;
     if (url) node.url = url;
-    const sameAs = [arxiv, doi, project].filter((item) => item && item !== url);
+    const sameAs = [arxiv, doi, project, openreview].filter((item) => item && item !== url);
     if (sameAs.length) node.sameAs = sameAs;
     return node;
   }),
