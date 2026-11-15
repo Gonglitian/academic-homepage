@@ -33,6 +33,22 @@ function formatAuthors(people: { name: string; href?: string }[]): string {
 
 const pubs: Pub[] = [
   {
+    title: "Learning in Zero Gravity: Altered Physics as a Source of Spatially Diverse Robot Experience",
+    authors: formatAuthors([
+      { name: "Asif Amin*" },
+      { name: "Litian Gong*" },
+    ]),
+    venue: "<b>NeurIPS</b> Workshop on PhysWorldAI",
+    year: 2026,
+    categories: ["vla"],
+    equalContribution: true,
+    id: "pub-zero-gravity",
+    media: { type: "image", src: "/images/zero-gravity-fig.jpg", alt: "Franka arm reaching a floating red cube inside a containment volume", width: 940, height: 697 },
+    links: [
+      { label: "OpenReview", href: "https://openreview.net/forum?id=KMVRTNtQU8" },
+    ],
+  },
+  {
     title: "Closed-Loop Customizable Human Following via Distilling Distance-Ordered Constrained Policies",
     authors: formatAuthors([
       { name: "Litian Gong*" },
@@ -148,21 +164,6 @@ const pubs: Pub[] = [
       { label: "arXiv", href: "https://arxiv.org/abs/2606.05405", cls: "btn-red" },
       { label: "OpenReview", href: "https://openreview.net/forum?id=L1pAwhCE4k" },
       { label: "code", href: "https://github.com/rdi-berkeley/agents-last-exam" },
-    ],
-  },
-  {
-    title: "Learning in Zero Gravity: Altered Physics as a Source of Spatially Diverse Robot Experience",
-    authors: formatAuthors([
-      { name: "Asif Amin" },
-      { name: "Litian Gong" },
-    ]),
-    venue: "<b>NeurIPS</b> Workshop on PhysWorldAI",
-    year: 2026,
-    categories: ["vla"],
-    id: "pub-zero-gravity",
-    media: { type: "image", src: "/images/zero-gravity-placeholder-v1.jpg", alt: "Title card for Learning in Zero Gravity", width: 1280, height: 720 },
-    links: [
-      { label: "OpenReview", href: "https://openreview.net/forum?id=KMVRTNtQU8" },
     ],
   },
   {
