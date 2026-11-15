@@ -5,7 +5,7 @@ interface Pub {
   venue: string;
   year: number;
   categories: string[];
-  links: { label: string; href: string; cls?: string }[];
+  links: { label: string; href: string; cls?: string; external?: boolean }[];
   media?:
     | { type: 'video'; src: string; poster: string; alt: string; width: number; height: number }
     | { type: 'image'; src: string; alt: string; width: number; height: number };
@@ -46,6 +46,7 @@ const pubs: Pub[] = [
     media: { type: "image", src: "/images/zero-gravity-fig.jpg", alt: "Franka arm reaching a floating red cube inside a containment volume", width: 940, height: 697 },
     links: [
       { label: "OpenReview", href: "https://openreview.net/forum?id=KMVRTNtQU8" },
+      { label: "Workshop", href: "https://physworld-org.github.io/physworld.github.io/", external: true },
     ],
   },
   {
@@ -384,7 +385,7 @@ const publicationJsonLd = JSON.stringify({
                   const stars = link.label === "code" ? starCount.get(link.href) : null;
                   return (
                     <>
-                      <a class={`btn ${link.cls || ''}`} href={link.href}>{link.label}</a>
+                      <a class={`btn ${link.cls || ''}`} href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noopener noreferrer" : undefined}>{link.label}</a>
                       {typeof stars === "number" && <span class="star-count">★ {formatStars(stars)}</span>}
                     </>
                   );
