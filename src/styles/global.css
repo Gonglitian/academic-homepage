@@ -276,7 +276,6 @@ header.header { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); 
 .news-more:hover { color: var(--text); }
 
 html.dark .katex, html.dark .katex-display { color: var(--text); }
-html.dark .visitor-map-slot { background: var(--bg-soft); }
 
 /* Hover zoom: a fixed layer on body, so overflow:hidden on the thumbnail cannot clip it. */
 @media (hover: hover) and (pointer: fine) {
@@ -474,38 +473,6 @@ html.dark .blog-post pre.astro-code span { color: var(--shiki-dark) !important; 
 .home-link:hover { opacity: 1; }
 .header-name a.home-link:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.14em; }
 .header-avatar a.home-link { display: block; }
-
-/* ===== Visitor map (homepage bottom) ===== */
-.visitor-map { margin: 40px 0 8px; }
-.visitor-map h2 { margin-bottom: 0.6em; }
-.visitor-map-frame {
-  display: flex;
-  justify-content: center;
-  container-type: inline-size;
-}
-.visitor-map-slot {
-  width: 100%;
-  max-width: 100%;
-  /* Map is width/2.04 plus the two caption lines, reserved before the widget arrives. */
-  min-height: calc(100cqw / 2.04 + 40px);
-}
-.visitor-map-slot #mapmyvisitors-widget {
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-.visitor-map-slot svg,
-.visitor-map-slot canvas,
-.visitor-map-slot img {
-  max-width: 100%;
-}
-.visitor-map-fallback {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--text-muted);
-  text-align: center;
-}
 
 /* =====================================================================
    SIDENOTES
